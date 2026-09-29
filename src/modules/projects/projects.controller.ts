@@ -19,7 +19,7 @@ export class ProjectsController {
   findAll(
     @Language() lang: SupportedLanguage,
     @Query() query: ProjectsQueryDto,
-  ): ProjectDto[] {
+  ): Partial<ProjectDto>[] {
     return this.service.findAll(lang, query);
   }
 
@@ -28,7 +28,8 @@ export class ProjectsController {
   findOne(
     @Language() lang: SupportedLanguage,
     @Param('slug') slug: string,
-  ): ProjectDto {
-    return this.service.findOne(lang, slug);
+    @Query('fields') fields?: string,
+  ): Partial<ProjectDto> {
+    return this.service.findOne(lang, slug, fields);
   }
 }

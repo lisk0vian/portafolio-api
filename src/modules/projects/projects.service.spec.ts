@@ -36,4 +36,12 @@ describe('ProjectsService', () => {
   it('throws 404 for unknown slug', () => {
     assert.throws(() => service.findOne('en', 'does-not-exist'), NotFoundException);
   });
+
+  it('exposes localized metrics on featured projects', () => {
+    const en = service.findOne('en', 'portfolio-api');
+    const es = service.findOne('es', 'portfolio-api');
+    assert.ok(en.metric);
+    assert.ok(es.metric);
+    assert.notEqual(en.metric, es.metric);
+  });
 });
