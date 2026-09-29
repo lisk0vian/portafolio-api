@@ -56,6 +56,7 @@ async function bootstrap() {
     .addTag('skills')
     .addTag('education')
     .addTag('certifications')
+    .addTag('publications')
     .addTag('case-studies')
     .addTag('health')
     .build();

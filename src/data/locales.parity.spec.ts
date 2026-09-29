@@ -10,6 +10,8 @@ import profileEn from './en/profile.js';
 import profileEs from './es/profile.js';
 import projectsEn from './en/projects.js';
 import projectsEs from './es/projects.js';
+import publicationsEn from './en/publications.js';
+import publicationsEs from './es/publications.js';
 import skillsEn from './en/skills.js';
 import skillsEs from './es/skills.js';
 
@@ -30,6 +32,10 @@ describe('locale parity (en/es)', () => {
 
   it('certifications expose the same slugs', () => {
     assert.deepEqual(slugs(certificationsEn), slugs(certificationsEs));
+  });
+
+  it('publications expose the same slugs', () => {
+    assert.deepEqual(slugs(publicationsEn), slugs(publicationsEs));
   });
 
   it('case studies expose the same slugs', () => {

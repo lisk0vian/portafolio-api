@@ -10,6 +10,7 @@ import { ExperienceModule } from './modules/experience/experience.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
 import { ProjectsModule } from './modules/projects/projects.module.js';
+import { PublicationsModule } from './modules/publications/publications.module.js';
 import { SkillsModule } from './modules/skills/skills.module.js';
 
 @Module({
@@ -30,6 +31,7 @@ import { SkillsModule } from './modules/skills/skills.module.js';
     HealthModule,
     ProfileModule,
     ProjectsModule,
+    PublicationsModule,
     ExperienceModule,
     SkillsModule,
     EducationModule,
