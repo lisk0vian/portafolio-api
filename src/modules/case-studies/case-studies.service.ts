@@ -4,12 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { SupportedLanguage } from '../../common/language/language.const.js';
-import casesEn from '../../data/en/case-studies.js';
-import casesEs from '../../data/es/case-studies.js';
 import {
-  CaseStudiesQueryDto,
-  CaseStudyDto,
-} from './case-studies.dto.js';
+  caseStudiesEn as casesEn,
+  caseStudiesEs as casesEs,
+} from '../../data/case-studies/index.js';
+import { CaseStudiesQueryDto, CaseStudyDto } from './case-studies.dto.js';
 
 const CASES_BY_LANGUAGE: Record<SupportedLanguage, CaseStudyDto[]> = {
   en: casesEn,
@@ -91,7 +90,8 @@ export class CaseStudiesService {
     fields?: string,
   ): Partial<CaseStudyDto> {
     const caseStudy = CASES_BY_LANGUAGE[lang].find((c) => c.slug === slug);
-    if (!caseStudy) throw new NotFoundException(`Case study '${slug}' not found`);
+    if (!caseStudy)
+      throw new NotFoundException(`Case study '${slug}' not found`);
     return pickFields(caseStudy, fields);
   }
 }

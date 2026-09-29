@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { SupportedLanguage } from '../../common/language/language.const.js';
-import educationEn from '../../data/en/education.js';
-import educationEs from '../../data/es/education.js';
+import { educationEn, educationEs } from '../../data/education/index.js';
 import type { EducationDto } from './education.dto.js';
 
 const EDUCATION_BY_LANGUAGE: Record<SupportedLanguage, EducationDto[]> = {

@@ -1,7 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import type { SupportedLanguage } from '../../common/language/language.const.js';
-import projectsEn from '../../data/en/projects.js';
-import projectsEs from '../../data/es/projects.js';
+import { projectsEn, projectsEs } from '../../data/projects/index.js';
 import { ProjectDto, type ProjectsQueryDto } from './projects.dto.js';
 
 const PROJECTS_BY_LANGUAGE: Record<SupportedLanguage, ProjectDto[]> = {
@@ -29,10 +32,7 @@ const FIELD_ALLOWLIST = new Set([
 
 // Projects the project to the requested fields.
 // slug is always included so clients can fetch the detail later.
-function pickFields(
-  project: ProjectDto,
-  fields?: string,
-): Partial<ProjectDto> {
+function pickFields(project: ProjectDto, fields?: string): Partial<ProjectDto> {
   if (!fields) return project;
   const requested = fields
     .split(',')

@@ -4,8 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { SupportedLanguage } from '../../common/language/language.const.js';
-import publicationsEn from '../../data/en/publications.js';
-import publicationsEs from '../../data/es/publications.js';
+import {
+  publicationsEn,
+  publicationsEs,
+} from '../../data/publications/index.js';
 import {
   PublicationDto,
   PublicationsQueryDto,

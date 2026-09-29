@@ -4,8 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { SupportedLanguage } from '../../common/language/language.const.js';
-import certificationsEn from '../../data/en/certifications.js';
-import certificationsEs from '../../data/es/certifications.js';
+import {
+  certificationsEn,
+  certificationsEs,
+} from '../../data/certifications/index.js';
 import {
   CertificationDto,
   CertificationGroupDto,
