@@ -36,7 +36,7 @@ Format: `pnpm run format` (prettier `singleQuote`, `trailingComma: all`).
 
 ## Content, language, versioning
 
-- Content lives in `src/data/en/*.ts` + `src/data/es/*.ts`, each typed with `satisfies <DTO>`. Edit data files, not services, for text changes.
+- Content lives in `src/data/<resource>/*.ts` (one bilingual file per entry, built with the `LocalizedFactory` subclasses in `src/data/_factories/` and aggregated by `src/data/<resource>/index.ts`), each typed via its DTO. Edit data files, not services, for text changes.
 - Always update **both** locales together. `src/data/locales.parity.spec.ts` fails on mismatched slugs/keys/counts.
 - URLs never contain language or version. Language: `x-lang` override wins over `Accept-Language` (`src/common/language/`; `resolveLanguage` accepts `es-ES`-style tags, falls back to `en`). Version: `x-api-version` header with fallback to `'1'` (`src/common/versioning/`; controllers declare no `@Version`, they rely on `defaultVersion`).
 - New endpoints: inject language via `@Language() lang: SupportedLanguage` and annotate with `@ApiLanguageHeader()` + `@ApiVersionHeader()`. Slugs and query params stay identical across languages.

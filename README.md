@@ -67,8 +67,9 @@ Supported versions: `1`. Missing values fall back to the default.
 Slugs and query params are identical in every language and version;
 only the localized text changes.
 
-Edit the content in `src/data/en/*.ts` and `src/data/es/*.ts`.
-Each file is checked against its DTO with `satisfies` at build time,
+Edit the content in `src/data/<resource>/*.ts` (one bilingual file per entry,
+built with the factories in `src/data/_factories/`).
+Each entry is validated by its factory at startup,
 and `locales.parity.spec.ts` ensures both languages expose the same entries.
 
 ## Quality gates
