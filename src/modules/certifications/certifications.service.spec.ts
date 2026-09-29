@@ -23,6 +23,82 @@ describe('CertificationsService', () => {
     assert.equal(multi.length, service.findAll('en', {}).length);
   });
 
+  it('filters by a single group matched against tags', () => {
+    const aws = service.findAll('en', { group: 'aws' });
+    assert.ok(aws.length >= 2);
+    assert.ok(
+      aws.every((c) =>
+        (c.tags as string[]).some((t) => t.toLowerCase() === 'aws'),
+      ),
+    );
+  });
+
+  it('matches group case-insensitively', () => {
+    const lower = service.findAll('en', { group: 'aws' });
+    const upper = service.findAll('en', { group: 'AWS' });
+    assert.deepEqual(
+      upper.map((c) => c.slug),
+      lower.map((c) => c.slug),
+    );
+  });
+
+  it('rejects multi-value and empty groups', () => {
+    assert.throws(
+      () => service.findAll('en', { group: 'aws,cloud' }),
+      BadRequestException,
+    );
+    assert.throws(
+      () => service.findAll('en', { group: '   ' }),
+      BadRequestException,
+    );
+  });
+
+  it('intersects group and tag filters (AND)', () => {
+    const both = service.findAll('en', { group: 'aws', tag: 'cloud' });
+    assert.ok(both.length >= 2);
+    const none = service.findAll('en', { group: 'aws', tag: 'example' });
+    assert.equal(none.length, 0);
+  });
+
+  it('lists groups with counts sorted alphabetically', () => {
+    const groups = service.findGroups('en');
+    const aws = groups.find((g) => g.group === 'aws');
+    assert.ok(aws);
+    assert.equal(aws.count, 2);
+    const names = groups.map((g) => g.group);
+    assert.deepEqual([...names].sort(), names);
+  });
+
+  it('enriches groups with latest cert and year range', () => {
+    const groups = service.findGroups('en');
+    const aws = groups.find((g) => g.group === 'aws');
+    assert.ok(aws);
+    assert.equal(aws.latest.title, 'AWS Certified Developer – Associate');
+    assert.equal(aws.latest.level, 'Associate');
+    assert.equal(aws.latest.year, 2024);
+    assert.equal(aws.fromYear, 2023);
+    assert.equal(aws.toYear, 2024);
+  });
+
+  it('finds certifications by group path param', () => {
+    const result = service.findByGroup('en', 'aws', {});
+    assert.ok(result.length >= 2);
+    const sparse = service.findByGroup('en', 'aws', { fields: 'title' });
+    assert.deepEqual(Object.keys(sparse[0]).sort(), ['slug', 'title']);
+  });
+
+  it('findByGroup returns [] for unknown groups and 400 for CSV', () => {
+    assert.deepEqual(service.findByGroup('en', 'does-not-exist', {}), []);
+    assert.throws(
+      () => service.findByGroup('en', 'aws,cloud', {}),
+      BadRequestException,
+    );
+    assert.throws(
+      () => service.findByGroup('en', 'aws', { group: 'aws' }),
+      BadRequestException,
+    );
+  });
+
   it('filters by skill inside the skills array', () => {
     const result = service.findAll('en', { skill: 'docker' });
     assert.ok(result.length > 0);
@@ -67,7 +143,11 @@ describe('CertificationsService', () => {
   });
 
   it('supports sparse detail responses', () => {
-    const result = service.findOne('en', 'aws-developer-associate', 'title,issuer');
+    const result = service.findOne(
+      'en',
+      'aws-developer-associate',
+      'title,issuer',
+    );
     assert.deepEqual(Object.keys(result).sort(), ['issuer', 'slug', 'title']);
   });
 

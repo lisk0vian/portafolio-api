@@ -19,6 +19,7 @@ const certifications = [
       "Node.js",
       "Docker"
     ],
+    "level": "Associate",
     "featured": true
   },
   {
@@ -38,6 +39,7 @@ const certifications = [
       "Docker",
       "CI/CD"
     ],
+    "level": "Associate",
     "featured": false
   },
   {

@@ -10,7 +10,9 @@ import {
 import { Type } from 'class-transformer';
 
 export class CertificationDto {
-  @ApiProperty({ description: 'Stable identifier, identical in every language.' })
+  @ApiProperty({
+    description: 'Stable identifier, identical in every language.',
+  })
   slug!: string;
 
   @ApiProperty()
@@ -50,8 +52,44 @@ export class CertificationDto {
   })
   skills!: string[];
 
+  @ApiProperty({
+    required: false,
+    description: "Level label, e.g. Associate. Absent when the issuer has none.",
+  })
+  level?: string;
+
   @ApiProperty()
   featured!: boolean;
+}
+
+export class CertificationLatestDto {
+  @ApiProperty()
+  title!: string;
+
+  @ApiProperty({ required: false })
+  level?: string;
+
+  @ApiProperty({ description: 'Year derived from issueDate.' })
+  year!: number;
+}
+
+export class CertificationGroupDto {
+  @ApiProperty({
+    description: 'Group slug, derived from tags. Stable across languages.',
+  })
+  group!: string;
+
+  @ApiProperty({ description: 'Number of certifications in this group.' })
+  count!: number;
+
+  @ApiProperty({ type: CertificationLatestDto })
+  latest!: CertificationLatestDto;
+
+  @ApiProperty({ description: 'Earliest issue year in this group.' })
+  fromYear!: number;
+
+  @ApiProperty({ description: 'Latest issue year in this group.' })
+  toYear!: number;
 }
 
 export class CertificationsQueryDto {
@@ -86,6 +124,15 @@ export class CertificationsQueryDto {
   @IsString()
   tag?: string;
 
+  @ApiProperty({
+    required: false,
+    description:
+      'Single group slug, matched against tags (e.g. group=aws). Use tag for multiple values.',
+  })
+  @IsOptional()
+  @IsString()
+  group?: string;
+
   @ApiProperty({ required: false })
   @IsOptional()
   @IsBooleanString()
@@ -115,4 +162,15 @@ export class CertificationsQueryDto {
   @Min(1)
   @Max(50)
   limit?: number = 20;
+
+  @ApiProperty({
+    required: false,
+    default: 0,
+    description: 'Number of items to skip, for pagination with limit.',
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  offset?: number = 0;
 }

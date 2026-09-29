@@ -157,6 +157,62 @@ describe('Portfolio API (e2e)', () => {
     assert.ok(res.json().every((c) => c.tags.includes('aws')));
   });
 
+  it('/api/certifications filters by single group (GET)', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/certifications?group=aws',
+    });
+    assert.equal(res.statusCode, 200);
+    assert.ok(res.json().length >= 2);
+    assert.ok(res.json().every((c) => c.tags.includes('aws')));
+  });
+
+  it('/api/certifications rejects multi-value group (GET 400)', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/certifications?group=aws,cloud',
+    });
+    assert.equal(res.statusCode, 400);
+  });
+
+  it('/api/certifications lists groups with counts (GET)', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/certifications/groups',
+    });
+    assert.equal(res.statusCode, 200);
+    const aws = res.json().find((g) => g.group === 'aws');
+    assert.ok(aws);
+    assert.equal(aws.count, 2);
+  });
+
+  it('/api/certifications returns a single group (GET)', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/certifications/groups/aws',
+    });
+    assert.equal(res.statusCode, 200);
+    assert.ok(res.json().length >= 2);
+    assert.ok(res.json().every((c) => c.tags.includes('aws')));
+  });
+
+  it('/api/certifications returns [] for unknown group (GET)', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/certifications/groups/does-not-exist',
+    });
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(res.json(), []);
+  });
+
+  it('/api/certifications rejects group in query on group detail (GET 400)', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/certifications/groups/aws?group=aws',
+    });
+    assert.equal(res.statusCode, 400);
+  });
+
   it('/api/certifications supports sparse responses (GET)', async () => {
     const res = await app.inject({
       method: 'GET',
@@ -183,7 +239,8 @@ describe('Portfolio API (e2e)', () => {
     });
     assert.equal(en.statusCode, 200);
     assert.equal(es.statusCode, 200);
-    const one = (list) => list.find((c) => c.slug === 'my-featured-certification');
+    const one = (list) =>
+      list.find((c) => c.slug === 'my-featured-certification');
     assert.notEqual(one(en.json()).title, one(es.json()).title);
   });
 
@@ -220,9 +277,11 @@ describe('Portfolio API (e2e)', () => {
     });
     assert.equal(en.statusCode, 200);
     assert.equal(es.statusCode, 200);
-    const one = (list) =>
-      list.find((c) => c.slug === 'payments-platform');
-    assert.equal(one(en.json()).sections.length, one(es.json()).sections.length);
+    const one = (list) => list.find((c) => c.slug === 'payments-platform');
+    assert.equal(
+      one(en.json()).sections.length,
+      one(es.json()).sections.length,
+    );
     assert.notEqual(one(en.json()).title, one(es.json()).title);
   });
 
