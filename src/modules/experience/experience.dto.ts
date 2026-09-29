@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { EDITIONS, type Edition } from '../../common/edition.js';
 
 export class ExperienceDto {
   @ApiProperty()
@@ -22,6 +23,21 @@ export class ExperienceDto {
   @ApiProperty()
   description!: string;
 
+  @ApiProperty({
+    required: false,
+    type: [String],
+    description: 'Measurable achievements for the timeline.',
+  })
+  wins?: string[];
+
   @ApiProperty({ type: [String] })
   stack!: string[];
+
+  @ApiProperty({
+    required: false,
+    enum: EDITIONS,
+    isArray: true,
+    description: 'Editions where it appears; absent means both.',
+  })
+  editions?: Edition[];
 }
