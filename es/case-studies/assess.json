@@ -31,7 +31,7 @@
   ],
   "links": [
     {
-      "label": "Código",
+      "label": "Código fuente, guía y ejemplos",
       "url": "https://github.com/lisk0vian/assess"
     }
   ],
@@ -63,6 +63,18 @@
           "format": "mermaid",
           "source": "flowchart LR\n  subgraph Laptop[Laptop del docente · binario ax]\n    TUI[Panel en terminal] --> SRV[Servidor HTTP Go]\n    SRV --> WEB[App React embebida]\n    SRV --> DB[(SQLite + bóveda cifrable)]\n    SRV --> PR[Proctor: decide avisos y faltas]\n  end\n  A1[Celular] -- Wi-Fi local --> SRV\n  A2[Laptop] -- Wi-Fi local --> SRV\n  A3[PC del aula] -- Wi-Fi local --> SRV",
           "caption": "Fig. 1 — Despliegue en el aula: nada sale de la red local."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/demo.gif",
+          "alt": "Demostración animada de un examen en assess",
+          "caption": "Demo: el alumno entra, responde y el docente lo sigue en vivo."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/panel-students.png",
+          "alt": "Panel del docente en la terminal con 24 alumnos respondiendo",
+          "caption": "Panel del docente: quién está en qué pregunta, conexión, faltas y tiempo."
         },
         {
           "type": "list",
@@ -109,6 +121,12 @@
               "Cuenta de inmediato. La segunda falta anula el examen."
             ]
           ]
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/exam.png",
+          "alt": "Vista del alumno con la lente de lectura y las opciones ocultas",
+          "caption": "Vista del alumno: la lente de lectura muestra pocas palabras a la vez y las opciones se revelan bajo el puntero."
         }
       ]
     },
@@ -116,6 +134,12 @@
       "id": "resultados",
       "heading": "Resultados",
       "blocks": [
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/report.png",
+          "alt": "Reporte de sesión con distribución de notas y análisis por pregunta",
+          "caption": "Reporte posterior: distribución de notas, alumnos a revisar y poder de discriminación de cada pregunta."
+        },
         {
           "type": "metrics",
           "items": [

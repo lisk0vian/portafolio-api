@@ -32,11 +32,11 @@
   ],
   "links": [
     {
-      "label": "Code",
+      "label": "Source code and docs",
       "url": "https://github.com/tribu-pe/tribu"
     },
     {
-      "label": "npm",
+      "label": "Package published on npm",
       "url": "https://www.npmjs.com/package/tribu"
     }
   ],

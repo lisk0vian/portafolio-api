@@ -32,19 +32,19 @@
   ],
   "links": [
     {
-      "label": "Repository",
+      "label": "Research repository",
       "url": "https://github.com/lisk0vian/research"
     },
     {
-      "label": "Frontiers in AI",
+      "label": "Paper: Carrion's disease (Frontiers in AI)",
       "url": "https://doi.org/10.3389/frai.2026.1883357"
     },
     {
-      "label": "Frontiers in Sust. Food Syst.",
+      "label": "Paper: potato prices (Frontiers in Sust. Food Syst.)",
       "url": "https://doi.org/10.3389/fsufs.2026.1883363"
     },
     {
-      "label": "ORCID",
+      "label": "Researcher profile (ORCID)",
       "url": "https://orcid.org/0009-0005-6789-076X"
     }
   ],

@@ -32,15 +32,15 @@
   ],
   "links": [
     {
-      "label": "Demo",
+      "label": "Live demo",
       "url": "https://lisk0vian.github.io/lumio/"
     },
     {
-      "label": "Code",
+      "label": "Source code",
       "url": "https://github.com/lisk0vian/lumio"
     },
     {
-      "label": "How the math works",
+      "label": "How the formula works",
       "url": "https://lisk0vian.github.io/lumio/en/calculation"
     }
   ],
@@ -52,6 +52,11 @@
         {
           "type": "paragraph",
           "text": "Peru's electricity bill folds usage, a fixed charge, public lighting and 18% IGV into a single number. Everyday questions —“if I use 120 kWh, how much will I pay?” or “I have S/ 100, how many kWh is that?”— have no quick answer."
+        },
+        {
+          "type": "demo",
+          "url": "https://lisk0vian.github.io/lumio/",
+          "caption": "Live demo: type a consumption and see the total and breakdown instantly."
         }
       ]
     },
@@ -82,6 +87,18 @@
       "id": "producto",
       "heading": "Product",
       "blocks": [
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/lumio/convert-kwh.png",
+          "alt": "Converting 120 kWh to S/ 89.88",
+          "caption": "kWh to soles: 120 kWh is S/ 89.88 including IGV."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/lumio/breakdown.png",
+          "alt": "Bill breakdown: energy, fixed charge, lighting, IGV and total",
+          "caption": "Every sol, itemised."
+        },
         {
           "type": "list",
           "items": [

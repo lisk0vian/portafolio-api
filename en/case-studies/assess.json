@@ -31,7 +31,7 @@
   ],
   "links": [
     {
-      "label": "Code",
+      "label": "Source code, guide and examples",
       "url": "https://github.com/lisk0vian/assess"
     }
   ],
@@ -63,6 +63,18 @@
           "format": "mermaid",
           "source": "flowchart LR\n  subgraph Laptop[Teacher laptop · ax binary]\n    TUI[Terminal panel] --> SRV[Go HTTP server]\n    SRV --> WEB[Embedded React app]\n    SRV --> DB[(SQLite + encryptable vault)]\n    SRV --> PR[Proctor: decides warnings and strikes]\n  end\n  A1[Phone] -- local Wi-Fi --> SRV\n  A2[Laptop] -- local Wi-Fi --> SRV\n  A3[Classroom PC] -- local Wi-Fi --> SRV",
           "caption": "Fig. 1 — Classroom deployment: nothing leaves the local network."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/demo.gif",
+          "alt": "Animated walkthrough of an exam in assess",
+          "caption": "Demo: a student joins and answers while the teacher follows live."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/panel-students.png",
+          "alt": "Teacher panel in the terminal with 24 students answering",
+          "caption": "Teacher panel: who is on which question, connection, strikes and time."
         },
         {
           "type": "list",
@@ -109,6 +121,12 @@
               "Counts at once. The second strike annuls the exam."
             ]
           ]
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/exam.png",
+          "alt": "Student view with the reading lens and hidden options",
+          "caption": "Student view: the reading lens shows a few words at a time and options reveal under the pointer."
         }
       ]
     },
@@ -116,6 +134,12 @@
       "id": "resultados",
       "heading": "Results",
       "blocks": [
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/assess/report.png",
+          "alt": "Session report with score distribution and per-question analysis",
+          "caption": "Post-exam report: score distribution, students to review and each question's discrimination."
+        },
         {
           "type": "metrics",
           "items": [

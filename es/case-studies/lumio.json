@@ -32,15 +32,15 @@
   ],
   "links": [
     {
-      "label": "Demo",
+      "label": "Demo en vivo",
       "url": "https://lisk0vian.github.io/lumio/"
     },
     {
-      "label": "Código",
+      "label": "Código fuente",
       "url": "https://github.com/lisk0vian/lumio"
     },
     {
-      "label": "Cómo se calcula",
+      "label": "Explicación de la fórmula",
       "url": "https://lisk0vian.github.io/lumio/en/calculation"
     }
   ],
@@ -52,6 +52,11 @@
         {
           "type": "paragraph",
           "text": "El recibo de luz en Perú junta consumo, cargo fijo, alumbrado público e IGV del 18% en un solo número. Preguntas cotidianas —«si consumo 120 kWh, ¿cuánto pagaré?» o «tengo S/ 100, ¿cuántos kWh son?»— no tienen respuesta rápida."
+        },
+        {
+          "type": "demo",
+          "url": "https://lisk0vian.github.io/lumio/",
+          "caption": "Demo en vivo: escribe un consumo y mira el total y el desglose al instante."
         }
       ]
     },
@@ -82,6 +87,18 @@
       "id": "producto",
       "heading": "Producto",
       "blocks": [
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/lumio/convert-kwh.png",
+          "alt": "Conversión de 120 kWh a S/ 89.88",
+          "caption": "De kWh a soles: 120 kWh son S/ 89.88 con IGV."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/lumio/breakdown.png",
+          "alt": "Desglose del recibo: energía, cargo fijo, alumbrado, IGV y total",
+          "caption": "Cada sol, desglosado."
+        },
         {
           "type": "list",
           "items": [

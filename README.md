@@ -22,7 +22,8 @@ es/ · en/                    mismos archivos en cada idioma
     └── <slug>.json          caso completo por bloques
 files/
 ├── cv/                      cv-es.pdf · cv-en.pdf
-└── certifications/          PDFs de certificados (<slug>.pdf)
+├── certifications/          PDFs de certificados (<slug>.pdf)
+└── cases/<slug>/            capturas de los casos de estudio
 scripts/validate.mjs         valida JSON, paridad es/en y enlaces entre casos
 ```
 
@@ -38,6 +39,8 @@ Un caso es una lista de `sections`, cada una con `blocks`:
 | `diagram` | `format: "mermaid"`, `source`, `caption` |
 | `table` | `head[]`, `rows[][]`, `caption` |
 | `metrics` | `items[]` con `value` y `label` |
+| `image` | `src` (URL de `files/cases/<slug>/`), `alt`, `caption` |
+| `demo` | `url` de una demo en vivo (se embebe), `caption` |
 
 Los diagramas son texto Mermaid: GitHub los muestra igual que el sitio.
 

@@ -34,15 +34,15 @@
   ],
   "links": [
     {
-      "label": "API",
+      "label": "Código de la API (NestJS)",
       "url": "https://github.com/chat-crm-suite/chat-crm-api"
     },
     {
-      "label": "App",
+      "label": "Código de la app web (React)",
       "url": "https://github.com/chat-crm-suite/chat-crm-app"
     },
     {
-      "label": "Servicio IA",
+      "label": "Código del servicio de IA (FastAPI)",
       "url": "https://github.com/chat-crm-suite/chat-crm-ia"
     }
   ],
