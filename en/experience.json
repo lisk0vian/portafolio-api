@@ -1,0 +1,44 @@
+[
+  {
+    "company": "J&P Periféricos SAC",
+    "role": "Full-stack developer · Team lead",
+    "location": "Lima, Peru · Hybrid",
+    "startDate": "2025-03",
+    "endDate": "2026-09",
+    "current": false,
+    "description": "Joined as an intern and was promoted to formally lead a team of 4 across parallel projects: an ERP for law firms, a ticketing system for inventory and systems-design support for other groups.",
+    "wins": [
+      "Invoice list from 4–5 minutes to under 30 seconds by rewriting queries and enabling caching.",
+      "Management Kanban with audit tables inside the ERP, now used by 2 client companies besides J&P.",
+      "Development and deployment environments in Docker; my own CRM in production as internal software."
+    ],
+    "stack": [
+      "TypeScript",
+      "PHP",
+      "Laravel",
+      "MySQL",
+      "Docker"
+    ]
+  },
+  {
+    "company": "Codecta Perú",
+    "role": "Full-stack developer",
+    "location": "Remote · team in Chile",
+    "startDate": "2024-06",
+    "endDate": "2025-11",
+    "current": false,
+    "description": "Ruby + jQuery backend in a distributed team, on a system used by an accounting firm of 100–200 people. Code and pull requests in English.",
+    "wins": [
+      "Reports with Excel export and payment recipes for imports and purchase orders.",
+      "Data sync for autocomplete and new invoice relations in the UI.",
+      "Docker deploys per feature and team environment setup."
+    ],
+    "stack": [
+      "Ruby",
+      "jQuery",
+      "JavaScript",
+      "AJAX",
+      "Docker"
+    ]
+  }
+]

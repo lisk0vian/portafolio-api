@@ -1,0 +1,173 @@
+{
+  "slug": "research-pipeline",
+  "projectSlug": "research-pipeline",
+  "year": 2026,
+  "title": "Investigación reproducible",
+  "deck": "Un monorepo de papers donde cada cifra sale de un pipeline versionado. Si un resultado no se reproduce, no entra al manuscrito.",
+  "stack": [
+    "Python",
+    "pandas",
+    "scikit-learn",
+    "LightGBM",
+    "Quarto",
+    "GitHub Actions"
+  ],
+  "meta": [
+    {
+      "label": "Rol",
+      "value": "Coautor · ingeniería del pipeline"
+    },
+    {
+      "label": "Manuscritos",
+      "value": "6"
+    },
+    {
+      "label": "Publicados",
+      "value": "2 en revistas Q1"
+    },
+    {
+      "label": "Dominios",
+      "value": "Salud · agro · clima · educación"
+    }
+  ],
+  "links": [
+    {
+      "label": "Repositorio",
+      "url": "https://github.com/lisk0vian/research"
+    },
+    {
+      "label": "Frontiers in AI",
+      "url": "https://doi.org/10.3389/frai.2026.1883357"
+    },
+    {
+      "label": "Frontiers in Sust. Food Syst.",
+      "url": "https://doi.org/10.3389/fsufs.2026.1883363"
+    },
+    {
+      "label": "ORCID",
+      "url": "https://orcid.org/0009-0005-6789-076X"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "El problema",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "En investigación aplicada es común que las tablas de un paper se copien a mano desde notebooks que ya nadie puede volver a ejecutar. Cuando un revisor pide un cambio, rehacer los números cuesta semanas y abre la puerta a errores."
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "heading": "El pipeline",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cada paper vive en su carpeta con un `manifest.yaml` (título, revista destino, autores y estado de cada cifra), sus datos, notebooks, experimentos y el manuscrito. Scripts compartidos construyen el PDF, validan DOIs y bibliografía, revisan la maquetación según la guía de la revista y sincronizan entregables."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  D[(Datos públicos peruanos)] --> N[Notebooks ejecutables]\n  N --> X[Experimentos versionados]\n  X --> O[Salidas: tablas y figuras]\n  O --> M[Manuscrito]\n  MF[manifest.yaml] --> M\n  M --> CI{CI}\n  CI --> V1[Validar DOIs y bibliografía]\n  CI --> V2[Revisar maquetación de la revista]\n  CI --> V3[Tests y build del PDF]",
+          "caption": "Fig. 1 — De los datos públicos al manuscrito, con CI en cada cambio."
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "code": "papers/\n├── c15-2026/   manifest.yaml · data/ · notebooks/ · experiments/ · paper/\n├── c17-2026/   … + DESIGN_DECISIONS.md · reviews/\n├── c20-2026/   … + METHODOLOGY.md · LITERATURE_REVIEW.md · tests/\n└── …\nscripts/\n├── paper_build.py          # construye el PDF del manuscrito\n├── doi_validate.py         # valida cada DOI de la bibliografía\n├── paper_layout_check.py   # revisa la maquetación según la revista\n└── journal_guide.py        # reglas de cada revista destino",
+          "caption": "Estructura del monorepo: un paper, una carpeta autocontenida.",
+          "source": "https://github.com/lisk0vian/research"
+        }
+      ]
+    },
+    {
+      "id": "publicaciones",
+      "heading": "Publicaciones",
+      "blocks": [
+        {
+          "type": "table",
+          "head": [
+            "Trabajo",
+            "Método",
+            "Revista",
+            "Estado"
+          ],
+          "rows": [
+            [
+              "Enfermedad de Carrión 2000–2024 (43.000+ registros)",
+              "FAMD + K-Means",
+              "Frontiers in AI · Q1",
+              "Publicado"
+            ],
+            [
+              "Precio mayorista de la papa Canchán (MIDAGRI 2020–2025)",
+              "LSTM-XGBoost vs SARIMAX/RNN",
+              "Frontiers in Sust. Food Syst. · Q1",
+              "Publicado"
+            ],
+            [
+              "Modelos Boosting en educación blended",
+              "Boosting",
+              "LACCEI 2026",
+              "Publicado"
+            ],
+            [
+              "Temperatura subestacional en los Andes",
+              "GBM · LSTM · TFT",
+              "Eng. Appl. of AI",
+              "En preparación"
+            ],
+            [
+              "Bajo peso al nacer, validación temporal (2015–2025)",
+              "Clasificación",
+              "Discover AI",
+              "En preparación"
+            ]
+          ],
+          "caption": "Los manuscritos en preparación viven en el mismo pipeline."
+        }
+      ]
+    },
+    {
+      "id": "decisiones",
+      "heading": "Decisiones de método",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Validación temporal, no aleatoria.** Las series se dividen por tiempo para medir la generalización real, no la memoria del modelo.",
+            "**Estabilidad sobre error mínimo.** En la papa Canchán elegimos LSTM-XGBoost por su robustez, aunque otro modelo tuviera un error puntual menor.",
+            "**Datos mixtos con FAMD.** Para registros clínicos con variables numéricas y categóricas, FAMD antes de K-Means dio la mejor calidad de clustering."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Resultados",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "2",
+              "label": "artículos Q1 publicados en 2026"
+            },
+            {
+              "value": "6",
+              "label": "manuscritos en el pipeline"
+            },
+            {
+              "value": "43.000+",
+              "label": "registros clínicos analizados"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "quote": "Cada número de un paper sale de un pipeline versionado; si no se reproduce, no entra.",
+  "nextCaseSlug": "chatcrm"
+}

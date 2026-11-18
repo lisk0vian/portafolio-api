@@ -1,0 +1,149 @@
+{
+  "slug": "assess",
+  "projectSlug": "assess",
+  "year": 2026,
+  "title": "assess (ax)",
+  "deck": "Classroom exams from a single laptop. The teacher supervises in the terminal; students answer from any browser on the local network. No installs, no accounts, no internet.",
+  "stack": [
+    "Go",
+    "React",
+    "TypeScript",
+    "SQLite",
+    "TUI"
+  ],
+  "meta": [
+    {
+      "label": "Role",
+      "value": "Author"
+    },
+    {
+      "label": "Platforms",
+      "value": "Windows · Linux · macOS"
+    },
+    {
+      "label": "Distribution",
+      "value": "One binary, even on USB"
+    },
+    {
+      "label": "Status",
+      "value": "Pre-alpha"
+    }
+  ],
+  "links": [
+    {
+      "label": "Code",
+      "url": "https://github.com/lisk0vian/assess"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "The problem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Many classrooms have no stable internet, machines don't allow installing software, and creating accounts for every student takes longer than the exam itself. Online platforms assume exactly the opposite."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then there is anti-cheat: common solutions watch through webcams or lockdown browsers, which are invasive and unfair to those who did nothing."
+        }
+      ]
+    },
+    {
+      "id": "arquitectura",
+      "heading": "Architecture",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Everything is a single Go program. The student app (React) is built and embedded in the binary with `go:embed`; so are the SQL migrations. The teacher runs it on their laptop and students join by link, QR code or session code."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  subgraph Laptop[Teacher laptop · ax binary]\n    TUI[Terminal panel] --> SRV[Go HTTP server]\n    SRV --> WEB[Embedded React app]\n    SRV --> DB[(SQLite + encryptable vault)]\n    SRV --> PR[Proctor: decides warnings and strikes]\n  end\n  A1[Phone] -- local Wi-Fi --> SRV\n  A2[Laptop] -- local Wi-Fi --> SRV\n  A3[Classroom PC] -- local Wi-Fi --> SRV",
+          "caption": "Fig. 1 — Classroom deployment: nothing leaves the local network."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**The server keeps the clock.** Time does not depend on the student's device; the teacher can give extra time to one student or everyone.",
+            "**Answers survive.** They save themselves and withstand a Wi-Fi drop, a closed tab or a server restart.",
+            "**Exams as files.** An exam is a folder of YAML you can edit, copy and version."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "antitrampa",
+      "heading": "Fair anti-cheat, without spying",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "`ax` only uses what a browser can see: tab switches, focus loss, copy, paste or leaving full screen. Each signal goes through a pure function that decides whether to ignore it, warn, or count a strike, depending on the chosen profile. The teacher can revert everything."
+        },
+        {
+          "type": "code",
+          "lang": "go",
+          "code": "// Decide maps a signal to a decision under these settings.\nfunc (s Settings) Decide(sig Signal) Decision {\n\tif !s.Enabled() {\n\t\treturn Decision{Ignore: true}\n\t}\n\tstrict := s.Profile == \"strict\"\n\tth := s.Thresholds()\n\td := sig.DurationMs\n\t// strict: every offence counts at once. standard: the first copy,\n\t// capture or paste is a warning, later ones count.\n\tfirst := !strict && sig.Count <= 1\n\tstrike := Decision{Severity: High, Warn: true, Strike: true}\n\tswitch sig.Kind {\n\tcase Hidden, Blur:\n\t\tlo, hi := th.HiddenWarn, th.HiddenStrike\n\t\tif sig.Kind == Blur {\n\t\t\tlo, hi = th.BlurWarn, th.BlurStrike\n\t\t}\n\t\tswitch {\n\t\tcase d < lo:\n\t\t\treturn Decision{Ignore: true}\n\t\tcase d <= hi:\n\t\t\treturn Decision{Severity: Warn, Warn: true}\n\t\t}\n\t\treturn strike\n\tcase Copy, Screenshot:\n\t\tif first {\n\t\t\treturn Decision{Severity: Warn, Warn: true}\n\t\t}\n\t\tstrike.VoidQ = true\n\t\treturn strike\n\t// ...\n\t}\n\treturn Decision{Severity: Info}\n}",
+          "caption": "Proctoring policy as a pure function: easy to test and to explain to students.",
+          "source": "https://github.com/lisk0vian/assess/blob/main/internal/proctor/proctor.go"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Profile",
+            "What it does"
+          ],
+          "rows": [
+            [
+              "off",
+              "No protections. Good for practice."
+            ],
+            [
+              "standard",
+              "Warns first, then counts strikes. Three strikes annul the exam."
+            ],
+            [
+              "strict",
+              "Counts at once. The second strike annuls the exam."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Results",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "0",
+              "label": "installs on student devices"
+            },
+            {
+              "value": "50",
+              "label": "Go test files"
+            },
+            {
+              "value": "3",
+              "label": "operating systems"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Automatic grading for single, multiple choice, true/false and short answers, with optional partial credit.",
+            "Post-exam report with score and time charts, per-question behaviour and an incident timeline.",
+            "Flags evidence worth reviewing —similar wrong answers, possible leaks— without treating it as proof."
+          ]
+        }
+      ]
+    }
+  ],
+  "quote": "Evidence is a prompt to review, not proof.",
+  "nextCaseSlug": "lumio"
+}

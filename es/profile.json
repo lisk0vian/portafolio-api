@@ -1,0 +1,121 @@
+{
+  "name": "Jerremi Aron Chancan Labajos",
+  "role": "Ingeniero de software full-stack",
+  "tagline": "Diseño el sistema y lo llevo a producción.",
+  "bio": "Desarrollador full-stack e investigador en machine learning. Construyo productos web completos en TypeScript —de la base de datos a la interfaz— y modelos que cualquiera puede reproducir.",
+  "location": "Lima, Perú · UTC-5",
+  "availability": "Abierto a roles full-stack, backend e investigación · híbrido en Lima o remoto",
+  "email": "chancanjeremiaron@gmail.com",
+  "timezone": "America/Lima",
+  "cvUrl": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cv/cv-es.pdf",
+  "avatarUrl": "https://raw.githubusercontent.com/lisk0vian/me/main/branding/linkedin/foto.jpg",
+  "logo": {
+    "dark": "https://raw.githubusercontent.com/lisk0vian/me/main/branding/logo/symbol.svg",
+    "light": "https://raw.githubusercontent.com/lisk0vian/me/main/branding/logo/symbol-light.svg"
+  },
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/lisk0vian",
+      "handle": "@lisk0vian",
+      "note": "Código abierto, ChatCRM, Tribu y notebooks."
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/jeremi-aron",
+      "handle": "@jeremi-aron",
+      "note": "Trayectoria y certificaciones."
+    },
+    {
+      "label": "Orcid",
+      "url": "https://orcid.org/0009-0005-6789-076X",
+      "handle": "0009-0005-6789-076X",
+      "note": "Publicaciones y registro de investigador."
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/AronJeremi",
+      "handle": "@AronJeremi"
+    }
+  ],
+  "about": [
+    "Mi perfil junta dos cosas que no suelen ir juntas: investigación en IA aplicada y entrega de software en producción. Diseño el sistema, lo construyo y lo veo llegar a usuarios reales.",
+    "Desde junio de 2024 entrego producto en varios equipos a la vez. En J&P Periféricos entré como practicante y hoy lidero un equipo de 4 personas; antes, en Codecta, trabajé con un equipo distribuido en Chile, con código y pull requests en inglés."
+  ],
+  "notes": [
+    "Más de 1.000 commits en ChatCRM, en producción como software interno desde 2025.",
+    "Un SDK propio publicado en npm: Tribu, facturación electrónica SUNAT.",
+    "Coautor de 2 artículos Q1 en Frontiers (2026), con datos peruanos reales."
+  ],
+  "letter": "Si buscas a alguien que diseñe el sistema y lo lleve a producción —con la investigación como respaldo y no como adorno—, escríbeme.",
+  "quote": "Cada número de un paper sale de un pipeline versionado; si no se reproduce, no entra.",
+  "quoteSource": "Cómo trabajo",
+  "facts": [
+    {
+      "label": "Base",
+      "value": "Lima, Perú"
+    },
+    {
+      "label": "Modalidad",
+      "value": "Híbrido · Remoto"
+    },
+    {
+      "label": "Idiomas",
+      "value": "Español (nativo) · Inglés (técnico)"
+    },
+    {
+      "label": "Formación",
+      "value": "Ing. de Software con IA · SENATI"
+    }
+  ],
+  "principles": [
+    {
+      "title": "Reproducible o no entra",
+      "text": "Cada número sale de un pipeline versionado; si no se reproduce, no se publica."
+    },
+    {
+      "title": "Todo pasa por CI",
+      "text": "Tests, validación de manuscritos y build en cada cambio."
+    },
+    {
+      "title": "Contratos antes de escalar",
+      "text": "Documento decisiones y el contrato de datos antes de crecer: un esquema Zod vale más que diez validaciones sueltas."
+    }
+  ],
+  "now": {
+    "updatedAt": "2026-11",
+    "items": [
+      {
+        "label": "Construyendo",
+        "value": "assess: exámenes en aula desde una laptop"
+      },
+      {
+        "label": "Investigando",
+        "value": "Pronóstico subestacional de temperatura en los Andes"
+      },
+      {
+        "label": "Aprendiendo",
+        "value": "AWS (VPC, IAM, Lambda) y SQL avanzado"
+      }
+    ]
+  },
+  "editions": {
+    "fullstack": {
+      "role": "Ingeniero de software full-stack",
+      "headline": {
+        "before": "Construyo productos web",
+        "emphasis": "de punta a punta",
+        "after": "— de la base de datos a producción."
+      }
+    },
+    "data": {
+      "role": "Ingeniero de IA / ML",
+      "bio": "Investigador en machine learning aplicado a salud, agro y educación con datos peruanos reales. Cada resultado sale de un pipeline versionado y reproducible.",
+      "headline": {
+        "before": "Convierto datos públicos",
+        "emphasis": "en modelos reproducibles",
+        "after": "— del notebook al paper revisado."
+      }
+    }
+  }
+}

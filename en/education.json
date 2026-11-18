@@ -1,0 +1,20 @@
+[
+  {
+    "school": "SENATI",
+    "degree": "Professional Technician in Software Engineering with Artificial Intelligence",
+    "period": "2023 — 2025",
+    "description": "Databases, web development and AI models; applied research with Q1 journal publications."
+  },
+  {
+    "school": "Platzi",
+    "degree": "Web and backend development tracks",
+    "period": "2021 — now",
+    "description": "Git, Bash, databases and web development."
+  },
+  {
+    "school": "freeCodeCamp",
+    "degree": "Responsive Web Design",
+    "period": "2021 — now",
+    "description": "HTML, CSS and responsive design."
+  }
+]

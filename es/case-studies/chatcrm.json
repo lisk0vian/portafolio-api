@@ -1,0 +1,217 @@
+{
+  "slug": "chatcrm",
+  "projectSlug": "chatcrm",
+  "year": 2026,
+  "title": "ChatCRM",
+  "deck": "Una bandeja compartida de WhatsApp donde cada conversación se asigna a un agente y se convierte en un cliente que se puede medir.",
+  "stack": [
+    "NestJS 11",
+    "React 19",
+    "MySQL 8",
+    "Redis 7",
+    "BullMQ",
+    "Socket.IO",
+    "Zod 4",
+    "FastAPI"
+  ],
+  "meta": [
+    {
+      "label": "Rol",
+      "value": "Autor principal · API y app"
+    },
+    {
+      "label": "Periodo",
+      "value": "2025 — 2026"
+    },
+    {
+      "label": "Servicios",
+      "value": "3 desacoplados"
+    },
+    {
+      "label": "Estado",
+      "value": "En producción"
+    }
+  ],
+  "links": [
+    {
+      "label": "API",
+      "url": "https://github.com/chat-crm-suite/chat-crm-api"
+    },
+    {
+      "label": "App",
+      "url": "https://github.com/chat-crm-suite/chat-crm-app"
+    },
+    {
+      "label": "Servicio IA",
+      "url": "https://github.com/chat-crm-suite/chat-crm-ia"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "El problema",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Muchas empresas atienden a sus clientes por WhatsApp desde un solo teléfono. Nadie sabe quién respondió, cuánto tardó ni si el cliente quedó satisfecho; cuando el equipo crece, los mensajes se pierden."
+        },
+        {
+          "type": "paragraph",
+          "text": "El objetivo: que cada número de teléfono sea un cliente con historial, que cada conversación tenga un responsable y que el equipo vea sus métricas en tiempo real."
+        }
+      ]
+    },
+    {
+      "id": "rol",
+      "heading": "Mi rol",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Soy el autor principal de la API (NestJS) y de la app web (React), con más de 1.000 commits. Diseñé la arquitectura de tres servicios, los contratos compartidos y la capa de seguridad; el servicio de IA lo integré como dependencia opcional."
+        }
+      ]
+    },
+    {
+      "id": "arquitectura",
+      "heading": "Arquitectura",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tres servicios desacoplados. La API es la única que habla con Meta; la app solo conoce la API, y el servicio de IA se puede apagar sin romper nada."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  WA[WhatsApp Cloud API] -- webhook firmado --> API\n  subgraph API[chat-crm-api · NestJS]\n    WH[Webhook + verificación HMAC] --> IN[Intake]\n    IN --> Q[(BullMQ / Redis)]\n    Q --> MED[Enriquecer media]\n    Q --> SEN[Sentimiento]\n    IN --> DB[(MySQL 8)]\n    GW[Gateway Socket.IO /chat]\n  end\n  SEN -- HTTP --> IA[chat-crm-ia · FastAPI]\n  GW <-- tiempo real --> APP[chat-crm-app · React]\n  APP -- REST + contratos Zod --> API",
+          "caption": "Fig. 1 — Componentes de ChatCRM y cómo fluye un mensaje."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "sequenceDiagram\n  participant M as Meta\n  participant A as API\n  participant R as Redis/BullMQ\n  participant U as App (agente)\n  M->>A: POST /webhook (X-Hub-Signature-256)\n  A->>A: verificar firma por canal\n  A->>A: guardar mensaje y asignar agente\n  A-->>M: 200 OK (rápido)\n  A->>R: encolar media y sentimiento\n  A-)U: evento Socket.IO \"message\"\n  R->>A: resultado de sentimiento\n  A-)U: evento \"analysis\"",
+          "caption": "Fig. 2 — Un mensaje entrante: Meta recibe su 200 antes de que corra el trabajo lento."
+        }
+      ]
+    },
+    {
+      "id": "decisiones",
+      "heading": "Decisiones técnicas",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**1. Firma verificada por canal, no global.** Un mismo endpoint recibe webhooks de varias empresas. Aceptar la firma de *cualquier* canal permitiría que el dueño de una app de Meta inyecte eventos en el canal de otra empresa; por eso cada canal mencionado en el payload debe validar con *sus* secretos, en tiempo constante."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "export function verifyWhatsAppSignature(rawBody: Buffer, signature: string | undefined, appSecret: string): boolean {\n  if (!rawBody || !signature || !appSecret) return false;\n  if (!signature.startsWith('sha256=')) return false;\n  const receivedHex = signature.slice('sha256='.length);\n  if (!/^[0-9a-fA-F]+$/.test(receivedHex)) return false;\n  const expected = createHmac('sha256', appSecret).update(rawBody).digest();\n  const received = Buffer.from(receivedHex, 'hex');\n  if (received.length !== expected.length) return false;\n  return timingSafeEqual(received, expected);\n}\n\n// Multi-tenant: TODOS los canales del post deben aceptar la firma con SUS secretos.\nexport function verifyWhatsAppSignatureForChannels(rawBody: Buffer, signature: string | undefined, candidatesPerChannel: string[][]): boolean {\n  if (candidatesPerChannel.length === 0) return false;\n  return candidatesPerChannel.every((candidates) =>\n    candidates.some((secret) => verifyWhatsAppSignature(rawBody, signature, secret)),\n  );\n}",
+          "caption": "HMAC-SHA256 sobre los bytes crudos y comparación en tiempo constante.",
+          "source": "https://github.com/chat-crm-suite/chat-crm-api/blob/main/src/integrations/whatsapp/security/whatsapp-signature.ts"
+        },
+        {
+          "type": "paragraph",
+          "text": "**2. Credenciales cifradas en reposo.** Los tokens de WhatsApp de cada empresa se guardan con AES-256-GCM dentro de un sobre JSON versionado (`v`, `iv`, `authTag`, `ciphertext`), así el algoritmo se puede rotar sin migrar el esquema."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "export function encryptCredentials(payload: object): string {\n  const iv = randomBytes(12);\n  const cipher = createCipheriv('aes-256-gcm', loadKey(), iv);\n  const ciphertext = Buffer.concat([\n    cipher.update(Buffer.from(JSON.stringify(payload), 'utf8')),\n    cipher.final(),\n  ]);\n  const envelope: CredentialsEnvelope = {\n    v: 1,\n    iv: iv.toString('base64'),\n    authTag: cipher.getAuthTag().toString('base64'),\n    ciphertext: ciphertext.toString('base64'),\n  };\n  return JSON.stringify(envelope);\n}",
+          "caption": "Sobre versionado: la clave sale de CREDENTIALS_ENCRYPTION_KEY y se valida a 32 bytes.",
+          "source": "https://github.com/chat-crm-suite/chat-crm-api/blob/main/src/lib/helpers/credentials.helper.ts"
+        },
+        {
+          "type": "paragraph",
+          "text": "**3. Un contrato, tres usos.** Los esquemas Zod de `src/contracts/` validan las peticiones, serializan las respuestas, generan la documentación OpenAPI y los importa la app web. Un cambio de contrato rompe el build de ambos lados en vez de fallar en producción."
+        },
+        {
+          "type": "paragraph",
+          "text": "**4. Lo lento va a colas.** Meta reintenta si el webhook tarda. La API responde 200 en cuanto guarda el mensaje; descargar media y calcular sentimiento corren en colas BullMQ con reintentos propios."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Decisión",
+            "Alternativa descartada",
+            "Por qué"
+          ],
+          "rows": [
+            [
+              "Firma por canal",
+              "Un secreto global",
+              "Aislamiento entre empresas"
+            ],
+            [
+              "BullMQ + Redis",
+              "Procesar en el webhook",
+              "Meta exige respuestas rápidas"
+            ],
+            [
+              "Contratos Zod compartidos",
+              "Tipos duplicados en la app",
+              "Una sola fuente de verdad"
+            ],
+            [
+              "IA como servicio aparte",
+              "Modelo dentro de la API",
+              "Python, GPU y despliegue independientes"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ia",
+      "heading": "Sentimiento en español",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El servicio `chat-crm-ia` usa pysentimiento, un transformer entrenado para español. Recibe un mensaje y devuelve su etiqueta con probabilidades; la API guarda el resultado y alimenta el dashboard."
+        },
+        {
+          "type": "code",
+          "lang": "bash",
+          "code": "curl -s -X POST http://localhost:8000/analyze_message \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"text\": \"Gracias, el pedido llegó perfecto\"}'\n\n{ \"text\": \"Gracias, el pedido llegó perfecto\",\n  \"label\": \"POS\",\n  \"probabilities\": { \"POS\": 0.98, \"NEU\": 0.01, \"NEG\": 0.01 } }",
+          "caption": "Contrato del servicio de IA: POS, NEU o NEG.",
+          "source": "https://github.com/chat-crm-suite/chat-crm-ia"
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Resultados",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "1.000+",
+              "label": "commits en API y app"
+            },
+            {
+              "value": "130",
+              "label": "suites de pruebas en la API"
+            },
+            {
+              "value": "3",
+              "label": "servicios desacoplados"
+            },
+            {
+              "value": "2025",
+              "label": "en producción desde"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Bandeja compartida en tiempo real con asignación automática de conversaciones.",
+            "Dashboard con KPIs mensuales, tendencias, ranking de agentes y sentimiento.",
+            "Instalación inicial en una sola transacción: admin, empresa y canal de WhatsApp."
+          ]
+        }
+      ]
+    }
+  ],
+  "quote": "Un contrato compartido rompe el build; un tipo duplicado rompe producción.",
+  "nextCaseSlug": "tribu"
+}

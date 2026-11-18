@@ -1,0 +1,126 @@
+{
+  "slug": "lumio",
+  "projectSlug": "lumio",
+  "year": 2026,
+  "title": "Lumio",
+  "deck": "Una calculadora transparente del recibo de luz: convierte kWh en soles y soles en kWh, desglosa cada cargo y corre entera en el navegador.",
+  "stack": [
+    "Astro",
+    "React",
+    "TypeScript",
+    "Tailwind",
+    "Zustand",
+    "Vitest"
+  ],
+  "meta": [
+    {
+      "label": "Rol",
+      "value": "Autor"
+    },
+    {
+      "label": "Backend",
+      "value": "Ninguno"
+    },
+    {
+      "label": "Despliegue",
+      "value": "CI → GitHub Pages"
+    },
+    {
+      "label": "Estado",
+      "value": "En vivo"
+    }
+  ],
+  "links": [
+    {
+      "label": "Demo",
+      "url": "https://lisk0vian.github.io/lumio/"
+    },
+    {
+      "label": "Código",
+      "url": "https://github.com/lisk0vian/lumio"
+    },
+    {
+      "label": "Cómo se calcula",
+      "url": "https://lisk0vian.github.io/lumio/en/calculation"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "El problema",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "El recibo de luz en Perú junta consumo, cargo fijo, alumbrado público e IGV del 18% en un solo número. Preguntas cotidianas —«si consumo 120 kWh, ¿cuánto pagaré?» o «tengo S/ 100, ¿cuántos kWh son?»— no tienen respuesta rápida."
+        }
+      ]
+    },
+    {
+      "id": "calculo",
+      "heading": "El cálculo",
+      "blocks": [
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  K[kWh] --> E[Energía = kWh × precio]\n  E --> S[Subtotal = energía + cargo fijo + alumbrado]\n  S --> I[IGV = subtotal × 18%]\n  I --> T[Total S/]\n  T -. inversa exacta .-> K",
+          "caption": "Fig. 1 — Ida y vuelta con la misma fórmula."
+        },
+        {
+          "type": "paragraph",
+          "text": "La conversión inversa es la inversa *exacta* de la directa, así que convertir ida y vuelta siempre devuelve el valor original. Llegar ahí requirió corregir un error sutil: el IGV se aplica al subtotal completo, por lo que hay que deshacerlo *antes* de restar los cargos."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "const monthlyTotal = safeTotal / multiplier\nconst monthlyCharges = fixed + lighting\n\n// Exact inverse of calculateKwhToMoney, which applies the IGV to the whole\n// subtotal (energy + charges). So the IGV has to be undone *before* the\n// charges are subtracted. Subtracting first [...] inflated every conversion\n// by charges * rate / (price * (1 + rate)): with the base tariff that is\n// +0.815 kWh, added again on every unit switch.\n//\n// The guard is the smallest bill this tariff can produce (charges + IGV).\nif (monthlyTotal < monthlyCharges * (1 + rate)) return { kwh: 0 }\n\nreturn { kwh: (monthlyTotal / (1 + rate) - monthlyCharges) / price }",
+          "caption": "El orden de las operaciones importa: el error sumaba +0,815 kWh en cada cambio de unidad.",
+          "source": "https://github.com/lisk0vian/lumio/blob/main/src/utils/calculation.utils.ts"
+        }
+      ]
+    },
+    {
+      "id": "producto",
+      "heading": "Producto",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Desglose en vivo de cada sol mientras escribes, con escala de consumo que usa texto además de color.",
+            "Historial guardado en el dispositivo; sin cuentas ni seguimiento.",
+            "Recibo exportable como PNG (generado desde el DOM), para compartir o enviar por WhatsApp.",
+            "Tarifas editables por regulador y periodo de facturación."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Resultados",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "0",
+              "label": "servidores"
+            },
+            {
+              "value": "2",
+              "label": "sentidos de conversión"
+            },
+            {
+              "value": "ES · EN",
+              "label": "idiomas"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Lumio se despliega con CI a GitHub Pages en cada cambio, con pruebas unitarias del cálculo como guardián de la fórmula."
+        }
+      ]
+    }
+  ],
+  "quote": "Si la ida y la vuelta no coinciden, el usuario deja de confiar en ambas.",
+  "nextCaseSlug": "research-pipeline"
+}

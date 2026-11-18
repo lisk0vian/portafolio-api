@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "chatcrm",
+    "projectSlug": "chatcrm",
+    "title": "ChatCRM",
+    "deck": "Una bandeja compartida de WhatsApp donde cada conversación se asigna a un agente y se convierte en un cliente que se puede medir.",
+    "year": 2026,
+    "stack": [
+      "NestJS 11",
+      "React 19",
+      "MySQL 8",
+      "Redis 7",
+      "BullMQ",
+      "Socket.IO",
+      "Zod 4",
+      "FastAPI"
+    ]
+  },
+  {
+    "slug": "tribu",
+    "projectSlug": "tribu",
+    "title": "Tribu",
+    "deck": "Emitir comprobantes electrónicos a SUNAT desde TypeScript en una sola llamada: sin escribir XML, sin calcular IGV, sin teclear códigos de SUNAT.",
+    "year": 2026,
+    "stack": [
+      "TypeScript",
+      "Node.js 22",
+      "UBL 2.1",
+      "XMLDSig",
+      "SOAP",
+      "Vitest"
+    ]
+  },
+  {
+    "slug": "assess",
+    "projectSlug": "assess",
+    "title": "assess (ax)",
+    "deck": "Exámenes en el aula desde una sola laptop. El docente supervisa en la terminal; los alumnos responden desde cualquier navegador de la red local. Sin instalaciones, sin cuentas, sin internet.",
+    "year": 2026,
+    "stack": [
+      "Go",
+      "React",
+      "TypeScript",
+      "SQLite",
+      "TUI"
+    ]
+  },
+  {
+    "slug": "lumio",
+    "projectSlug": "lumio",
+    "title": "Lumio",
+    "deck": "Una calculadora transparente del recibo de luz: convierte kWh en soles y soles en kWh, desglosa cada cargo y corre entera en el navegador.",
+    "year": 2026,
+    "stack": [
+      "Astro",
+      "React",
+      "TypeScript",
+      "Tailwind",
+      "Zustand",
+      "Vitest"
+    ]
+  },
+  {
+    "slug": "research-pipeline",
+    "projectSlug": "research-pipeline",
+    "title": "Investigación reproducible",
+    "deck": "Un monorepo de papers donde cada cifra sale de un pipeline versionado. Si un resultado no se reproduce, no entra al manuscrito.",
+    "year": 2026,
+    "stack": [
+      "Python",
+      "pandas",
+      "scikit-learn",
+      "LightGBM",
+      "Quarto",
+      "GitHub Actions"
+    ]
+  }
+]

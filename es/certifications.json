@@ -1,0 +1,158 @@
+[
+  {
+    "slug": "midudev-sql",
+    "title": "Aprende SQL — Curso completo",
+    "issuer": "midudev",
+    "category": "datos",
+    "tags": [
+      "sql"
+    ],
+    "issueDate": "2026-11",
+    "credentialId": "ae2e8e35-f8c6-4ea6-b4b2-57f4dcd1803b",
+    "credentialUrl": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/certifications/midudev-sql.pdf",
+    "skills": [
+      "SQL"
+    ],
+    "featured": true
+  },
+  {
+    "slug": "aws-vpc-intro",
+    "title": "Introduction to Amazon Virtual Private Cloud (VPC)",
+    "issuer": "AWS Training and Certification",
+    "category": "cloud",
+    "tags": [
+      "aws"
+    ],
+    "issueDate": "2026-09",
+    "skills": [
+      "AWS",
+      "Amazon VPC"
+    ],
+    "featured": false
+  },
+  {
+    "slug": "aws-iam-troubleshooting",
+    "title": "AWS Identity and Access Management (IAM) — Troubleshooting",
+    "issuer": "AWS Training and Certification",
+    "category": "cloud",
+    "tags": [
+      "aws"
+    ],
+    "issueDate": "2026-09",
+    "skills": [
+      "AWS",
+      "AWS IAM"
+    ],
+    "featured": false
+  },
+  {
+    "slug": "aws-iam-intro",
+    "title": "Introduction to AWS Identity and Access Management (IAM)",
+    "issuer": "AWS Training and Certification",
+    "category": "cloud",
+    "tags": [
+      "aws"
+    ],
+    "issueDate": "2026-09",
+    "skills": [
+      "AWS",
+      "AWS IAM"
+    ],
+    "featured": false
+  },
+  {
+    "slug": "aws-lambda-foundations",
+    "title": "AWS Lambda Foundations",
+    "issuer": "AWS Training and Certification",
+    "category": "cloud",
+    "tags": [
+      "aws"
+    ],
+    "issueDate": "2026-09",
+    "skills": [
+      "AWS",
+      "AWS Lambda"
+    ],
+    "featured": true
+  },
+  {
+    "slug": "aws-s3-intro",
+    "title": "Introduction to Amazon Simple Storage Service (S3)",
+    "issuer": "AWS Training and Certification",
+    "category": "cloud",
+    "tags": [
+      "aws"
+    ],
+    "issueDate": "2026-09",
+    "skills": [
+      "AWS",
+      "AWS CLI"
+    ],
+    "featured": false
+  },
+  {
+    "slug": "anthropic-ai-fluency",
+    "title": "AI Fluency: Framework & Foundations",
+    "issuer": "Anthropic",
+    "category": "ia",
+    "tags": [
+      "ia"
+    ],
+    "issueDate": "2026-09",
+    "credentialId": "3dhg8bi27dno",
+    "credentialUrl": "https://verify.skilljar.com/c/3dhg8bi27dno",
+    "skills": [
+      "IA generativa"
+    ],
+    "featured": true
+  },
+  {
+    "slug": "ibm-data-fundamentals",
+    "title": "Data Fundamentals",
+    "issuer": "IBM",
+    "category": "datos",
+    "tags": [
+      "datos"
+    ],
+    "issueDate": "2026-09",
+    "credentialUrl": "https://www.credly.com/badges/724a6dd6-45d0-43c1-977f-6d671ff2e822",
+    "skills": [
+      "Data analysis"
+    ],
+    "featured": false
+  },
+  {
+    "slug": "ibm-ml-data-science",
+    "title": "Machine Learning for Data Science Projects",
+    "issuer": "IBM",
+    "category": "datos",
+    "tags": [
+      "datos",
+      "ia"
+    ],
+    "issueDate": "2026-08",
+    "credentialId": "10d7517a-d9d8-4f8d-afaf-05ada3a0036f",
+    "credentialUrl": "https://www.credly.com/badges/10d7517a-d9d8-4f8d-afaf-05ada3a0036f",
+    "skills": [
+      "Machine learning"
+    ],
+    "featured": true
+  },
+  {
+    "slug": "fcc-responsive-web-design",
+    "title": "Legacy Responsive Web Design V8",
+    "issuer": "freeCodeCamp",
+    "category": "web",
+    "tags": [
+      "web"
+    ],
+    "issueDate": "2022-02",
+    "credentialId": "jeremi_aron-rwd",
+    "credentialUrl": "https://freecodecamp.org/certification/jeremi_aron/responsive-web-design",
+    "skills": [
+      "HTML",
+      "CSS"
+    ],
+    "featured": false
+  }
+]

@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "chatcrm",
+    "projectSlug": "chatcrm",
+    "title": "ChatCRM",
+    "deck": "A shared WhatsApp inbox where every conversation is assigned to an agent and becomes a customer you can measure.",
+    "year": 2026,
+    "stack": [
+      "NestJS 11",
+      "React 19",
+      "MySQL 8",
+      "Redis 7",
+      "BullMQ",
+      "Socket.IO",
+      "Zod 4",
+      "FastAPI"
+    ]
+  },
+  {
+    "slug": "tribu",
+    "projectSlug": "tribu",
+    "title": "Tribu",
+    "deck": "Issue electronic payment documents to SUNAT from TypeScript in one call: no XML to write, no IGV to compute, no SUNAT codes to type.",
+    "year": 2026,
+    "stack": [
+      "TypeScript",
+      "Node.js 22",
+      "UBL 2.1",
+      "XMLDSig",
+      "SOAP",
+      "Vitest"
+    ]
+  },
+  {
+    "slug": "assess",
+    "projectSlug": "assess",
+    "title": "assess (ax)",
+    "deck": "Classroom exams from a single laptop. The teacher supervises in the terminal; students answer from any browser on the local network. No installs, no accounts, no internet.",
+    "year": 2026,
+    "stack": [
+      "Go",
+      "React",
+      "TypeScript",
+      "SQLite",
+      "TUI"
+    ]
+  },
+  {
+    "slug": "lumio",
+    "projectSlug": "lumio",
+    "title": "Lumio",
+    "deck": "A transparent electricity-bill calculator: turns kWh into soles and soles into kWh, itemises every charge and runs entirely in the browser.",
+    "year": 2026,
+    "stack": [
+      "Astro",
+      "React",
+      "TypeScript",
+      "Tailwind",
+      "Zustand",
+      "Vitest"
+    ]
+  },
+  {
+    "slug": "research-pipeline",
+    "projectSlug": "research-pipeline",
+    "title": "Reproducible research",
+    "deck": "A paper monorepo where every figure comes from a versioned pipeline. If a result does not reproduce, it does not go into the manuscript.",
+    "year": 2026,
+    "stack": [
+      "Python",
+      "pandas",
+      "scikit-learn",
+      "LightGBM",
+      "Quarto",
+      "GitHub Actions"
+    ]
+  }
+]

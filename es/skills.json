@@ -1,0 +1,204 @@
+[
+  {
+    "category": "Backend",
+    "items": [
+      {
+        "name": "TypeScript",
+        "years": 3,
+        "daily": true
+      },
+      {
+        "name": "NestJS",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "Node.js",
+        "years": 3,
+        "daily": true
+      },
+      {
+        "name": "PHP / Laravel",
+        "years": 2,
+        "daily": false
+      },
+      {
+        "name": "Ruby",
+        "years": 1,
+        "daily": false
+      },
+      {
+        "name": "Go",
+        "years": 1,
+        "daily": false
+      },
+      {
+        "name": "FastAPI",
+        "years": 1,
+        "daily": false
+      }
+    ],
+    "editions": [
+      "fullstack"
+    ]
+  },
+  {
+    "category": "Datos y colas",
+    "items": [
+      {
+        "name": "MySQL",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "PostgreSQL",
+        "years": 2,
+        "daily": false
+      },
+      {
+        "name": "Redis",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "BullMQ",
+        "years": 1,
+        "daily": true
+      },
+      {
+        "name": "TypeORM",
+        "years": 2,
+        "daily": false
+      },
+      {
+        "name": "SQLite",
+        "years": 1,
+        "daily": false
+      }
+    ],
+    "editions": [
+      "fullstack"
+    ]
+  },
+  {
+    "category": "Frontend",
+    "items": [
+      {
+        "name": "React",
+        "years": 3,
+        "daily": true
+      },
+      {
+        "name": "TanStack Router/Query",
+        "years": 1,
+        "daily": true
+      },
+      {
+        "name": "Tailwind CSS",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "Astro",
+        "years": 2,
+        "daily": false
+      },
+      {
+        "name": "jQuery",
+        "years": 1,
+        "daily": false
+      }
+    ],
+    "editions": [
+      "fullstack"
+    ]
+  },
+  {
+    "category": "DevOps",
+    "items": [
+      {
+        "name": "Docker",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "Git",
+        "years": 5,
+        "daily": true
+      },
+      {
+        "name": "GitHub Actions",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "AWS",
+        "years": 1,
+        "daily": false
+      }
+    ]
+  },
+  {
+    "category": "Machine learning",
+    "items": [
+      {
+        "name": "Python",
+        "years": 3,
+        "daily": true
+      },
+      {
+        "name": "pandas",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "scikit-learn",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "XGBoost / LightGBM",
+        "years": 1,
+        "daily": false
+      },
+      {
+        "name": "LSTM / PyTorch",
+        "years": 1,
+        "daily": false
+      },
+      {
+        "name": "Quarto",
+        "years": 1,
+        "daily": false
+      }
+    ],
+    "editions": [
+      "data"
+    ]
+  },
+  {
+    "category": "Pruebas",
+    "items": [
+      {
+        "name": "Jest",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "Vitest",
+        "years": 2,
+        "daily": true
+      },
+      {
+        "name": "Testing Library",
+        "years": 1,
+        "daily": false
+      },
+      {
+        "name": "pytest",
+        "years": 1,
+        "daily": false
+      }
+    ]
+  }
+]

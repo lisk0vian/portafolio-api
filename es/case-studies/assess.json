@@ -1,0 +1,149 @@
+{
+  "slug": "assess",
+  "projectSlug": "assess",
+  "year": 2026,
+  "title": "assess (ax)",
+  "deck": "Exámenes en el aula desde una sola laptop. El docente supervisa en la terminal; los alumnos responden desde cualquier navegador de la red local. Sin instalaciones, sin cuentas, sin internet.",
+  "stack": [
+    "Go",
+    "React",
+    "TypeScript",
+    "SQLite",
+    "TUI"
+  ],
+  "meta": [
+    {
+      "label": "Rol",
+      "value": "Autor"
+    },
+    {
+      "label": "Plataformas",
+      "value": "Windows · Linux · macOS"
+    },
+    {
+      "label": "Distribución",
+      "value": "Un binario, incluso en USB"
+    },
+    {
+      "label": "Estado",
+      "value": "Pre-alpha"
+    }
+  ],
+  "links": [
+    {
+      "label": "Código",
+      "url": "https://github.com/lisk0vian/assess"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "El problema",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "En muchas aulas no hay internet estable, los equipos no permiten instalar software y crear cuentas para cada alumno lleva más tiempo que el propio examen. Las plataformas en línea asumen justamente lo contrario."
+        },
+        {
+          "type": "paragraph",
+          "text": "A eso se suma el anti-trampa: las soluciones comunes vigilan con webcam o navegadores bloqueados, invasivos e injustos con quien no hizo nada."
+        }
+      ]
+    },
+    {
+      "id": "arquitectura",
+      "heading": "Arquitectura",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Todo es un único programa Go. La app del alumno (React) se compila y se embebe en el binario con `go:embed`; las migraciones SQL también. El docente lo ejecuta en su laptop y los alumnos entran por enlace, QR o código de sesión."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  subgraph Laptop[Laptop del docente · binario ax]\n    TUI[Panel en terminal] --> SRV[Servidor HTTP Go]\n    SRV --> WEB[App React embebida]\n    SRV --> DB[(SQLite + bóveda cifrable)]\n    SRV --> PR[Proctor: decide avisos y faltas]\n  end\n  A1[Celular] -- Wi-Fi local --> SRV\n  A2[Laptop] -- Wi-Fi local --> SRV\n  A3[PC del aula] -- Wi-Fi local --> SRV",
+          "caption": "Fig. 1 — Despliegue en el aula: nada sale de la red local."
+        },
+        {
+          "type": "list",
+          "items": [
+            "**El servidor lleva el reloj.** El tiempo no depende del dispositivo del alumno; el docente puede dar tiempo extra a uno o a todos.",
+            "**Las respuestas sobreviven.** Se guardan solas y resisten una caída de Wi-Fi, una pestaña cerrada o un reinicio del servidor.",
+            "**Exámenes como archivos.** Un examen es una carpeta YAML que se edita, copia y versiona."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "antitrampa",
+      "heading": "Anti-trampa justo, sin espiar",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "`ax` solo usa lo que un navegador puede ver: cambio de pestaña, pérdida de foco, copiar, pegar o salir de pantalla completa. Cada señal pasa por una función pura que decide si se ignora, se avisa o cuenta como falta, según el perfil elegido. Todo es reversible por el docente."
+        },
+        {
+          "type": "code",
+          "lang": "go",
+          "code": "// Decide maps a signal to a decision under these settings.\nfunc (s Settings) Decide(sig Signal) Decision {\n\tif !s.Enabled() {\n\t\treturn Decision{Ignore: true}\n\t}\n\tstrict := s.Profile == \"strict\"\n\tth := s.Thresholds()\n\td := sig.DurationMs\n\t// strict: every offence counts at once. standard: the first copy,\n\t// capture or paste is a warning, later ones count.\n\tfirst := !strict && sig.Count <= 1\n\tstrike := Decision{Severity: High, Warn: true, Strike: true}\n\tswitch sig.Kind {\n\tcase Hidden, Blur:\n\t\tlo, hi := th.HiddenWarn, th.HiddenStrike\n\t\tif sig.Kind == Blur {\n\t\t\tlo, hi = th.BlurWarn, th.BlurStrike\n\t\t}\n\t\tswitch {\n\t\tcase d < lo:\n\t\t\treturn Decision{Ignore: true}\n\t\tcase d <= hi:\n\t\t\treturn Decision{Severity: Warn, Warn: true}\n\t\t}\n\t\treturn strike\n\tcase Copy, Screenshot:\n\t\tif first {\n\t\t\treturn Decision{Severity: Warn, Warn: true}\n\t\t}\n\t\tstrike.VoidQ = true\n\t\treturn strike\n\t// ...\n\t}\n\treturn Decision{Severity: Info}\n}",
+          "caption": "Política de supervisión como función pura: fácil de probar y de explicar al alumno.",
+          "source": "https://github.com/lisk0vian/assess/blob/main/internal/proctor/proctor.go"
+        },
+        {
+          "type": "table",
+          "head": [
+            "Perfil",
+            "Qué hace"
+          ],
+          "rows": [
+            [
+              "off",
+              "Sin protecciones. Ideal para practicar."
+            ],
+            [
+              "standard",
+              "Avisa primero y luego cuenta faltas. Tres faltas anulan el examen."
+            ],
+            [
+              "strict",
+              "Cuenta de inmediato. La segunda falta anula el examen."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Resultados",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "0",
+              "label": "instalaciones en los equipos de alumnos"
+            },
+            {
+              "value": "50",
+              "label": "archivos de pruebas en Go"
+            },
+            {
+              "value": "3",
+              "label": "sistemas operativos"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Calificación automática de opción única, múltiple, verdadero/falso y respuestas cortas, con crédito parcial opcional.",
+            "Reporte posterior con gráficos de nota y tiempo, comportamiento de cada pregunta y línea de tiempo de incidentes.",
+            "Señala evidencia para revisar —respuestas incorrectas similares, posibles filtraciones— sin tratarla como prueba."
+          ]
+        }
+      ]
+    }
+  ],
+  "quote": "La evidencia es una invitación a revisar, no una prueba.",
+  "nextCaseSlug": "lumio"
+}

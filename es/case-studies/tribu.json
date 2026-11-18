@@ -1,0 +1,160 @@
+{
+  "slug": "tribu",
+  "projectSlug": "tribu",
+  "year": 2026,
+  "title": "Tribu",
+  "deck": "Emitir comprobantes electrónicos a SUNAT desde TypeScript en una sola llamada: sin escribir XML, sin calcular IGV, sin teclear códigos de SUNAT.",
+  "stack": [
+    "TypeScript",
+    "Node.js 22",
+    "UBL 2.1",
+    "XMLDSig",
+    "SOAP",
+    "Vitest"
+  ],
+  "meta": [
+    {
+      "label": "Rol",
+      "value": "Autor único"
+    },
+    {
+      "label": "Distribución",
+      "value": "npm · tribu@experimental"
+    },
+    {
+      "label": "Licencia",
+      "value": "MIT"
+    },
+    {
+      "label": "Estado",
+      "value": "Experimental · validado en beta"
+    }
+  ],
+  "links": [
+    {
+      "label": "Código",
+      "url": "https://github.com/tribu-pe/tribu"
+    },
+    {
+      "label": "npm",
+      "url": "https://www.npmjs.com/package/tribu"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "El problema",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "En Perú, toda venta formal debe emitirse como comprobante electrónico ante SUNAT. Sin una librería, eso significa calcular el IGV, escribir XML UBL 2.1, firmarlo con el certificado digital, comprimirlo, enviarlo por SOAP y decodificar la constancia de respuesta (CDR)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cada paso tiene reglas que SUNAT solo reporta después de enviar, con códigos de error poco claros."
+        }
+      ]
+    },
+    {
+      "id": "solucion",
+      "heading": "La solución",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tribu reduce todo el proceso a una llamada. Calcula los montos, valida el documento contra las reglas de SUNAT *antes* de enviarlo, construye y firma el XML, lo envía y devuelve un único `Record` JSON para que lo guardes."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "import tribu, { Status } from 'tribu';\n\nconst sunat = tribu.create({\n  env: 'beta',\n  issuer: { ruc: '20000000001', name: 'EMPRESA DE PRUEBA SAC', ubigeo: '150101' },\n  sol: { user: 'MODDATOS', password: 'MODDATOS' }, // credenciales beta públicas de SUNAT\n  certificate: { pfx: readFileSync('certificate.pfx'), passphrase },\n  nextNumber: (series) => db.nextNumber(series),  // tu base de datos reserva el número\n});\n\nconst { record } = await sunat.invoice({\n  customer: { ruc: '20123456786', name: 'CLIENTE SAC' },\n  items: [{ description: 'Teclado', quantity: 2, price: 118 }],\n});",
+          "caption": "Emitir una factura: el IGV, el XML y la firma los resuelve Tribu.",
+          "source": "https://github.com/tribu-pe/tribu#quick-start"
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  A[sunat.invoice] --> B[Calcular montos e IGV]\n  B --> C{Reglas SUNAT}\n  C -- error --> X[Error con la corrección sugerida]\n  C -- ok --> D[XML UBL 2.1]\n  D --> E[Firma XMLDSig]\n  E --> F[ZIP + SOAP]\n  F --> G[(SUNAT)]\n  G --> H[CDR]\n  H --> R[Record JSON]",
+          "caption": "Fig. 1 — El pipeline de emisión: las reglas se validan antes de tocar la red."
+        }
+      ]
+    },
+    {
+      "id": "decisiones",
+      "heading": "Decisiones técnicas",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Solo servidor.** Tribu maneja el certificado y la clave SOL, así que `tribu.create` se niega a ejecutarse en un navegador.",
+            "**Tu base de datos numera.** `nextNumber` es un callback: la correlatividad la garantiza tu transacción, no un contador en memoria.",
+            "**Errores accionables.** Cada error de validación dice qué campo falla y cómo corregirlo, antes de gastar un envío.",
+            "**Transporte reemplazable.** Un `transport` propio permite apuntar a un OSE sin cambiar el resto."
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Área",
+            "Cubierto en v0.1"
+          ],
+          "rows": [
+            [
+              "Documentos",
+              "Facturas, boletas (individuales o en resumen diario), notas de crédito y débito"
+            ],
+            [
+              "Reportes",
+              "Resumen diario, comunicación de baja, `waitFor`, `retry`"
+            ],
+            [
+              "IGV",
+              "General y tasa reducida para restaurantes y hoteles"
+            ],
+            [
+              "Moneda",
+              "PEN, USD"
+            ],
+            [
+              "Pago",
+              "Contado o crédito con cuotas"
+            ],
+            [
+              "Detracciones",
+              "En facturas en soles"
+            ]
+          ],
+          "caption": "Alcance actual; lo no cubierto está documentado en el README."
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Resultados",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "100%",
+              "label": "tipos de documento aceptados en beta SUNAT"
+            },
+            {
+              "value": "67",
+              "label": "archivos de prueba"
+            },
+            {
+              "value": "1",
+              "label": "llamada para emitir"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "El entorno beta de SUNAT acepta todos los tipos de documento que Tribu emite. La versión se publica como experimental hasta verificarla en producción, y el README explica cómo reportar esa experiencia sin exponer credenciales."
+        }
+      ]
+    }
+  ],
+  "quote": "Nunca escribes XML, nunca calculas IGV y nunca tecleas un código de SUNAT a mano.",
+  "nextCaseSlug": "assess"
+}

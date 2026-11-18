@@ -1,0 +1,173 @@
+{
+  "slug": "research-pipeline",
+  "projectSlug": "research-pipeline",
+  "year": 2026,
+  "title": "Reproducible research",
+  "deck": "A paper monorepo where every figure comes from a versioned pipeline. If a result does not reproduce, it does not go into the manuscript.",
+  "stack": [
+    "Python",
+    "pandas",
+    "scikit-learn",
+    "LightGBM",
+    "Quarto",
+    "GitHub Actions"
+  ],
+  "meta": [
+    {
+      "label": "Role",
+      "value": "Co-author · pipeline engineering"
+    },
+    {
+      "label": "Manuscripts",
+      "value": "6"
+    },
+    {
+      "label": "Published",
+      "value": "2 in Q1 journals"
+    },
+    {
+      "label": "Domains",
+      "value": "Health · agriculture · climate · education"
+    }
+  ],
+  "links": [
+    {
+      "label": "Repository",
+      "url": "https://github.com/lisk0vian/research"
+    },
+    {
+      "label": "Frontiers in AI",
+      "url": "https://doi.org/10.3389/frai.2026.1883357"
+    },
+    {
+      "label": "Frontiers in Sust. Food Syst.",
+      "url": "https://doi.org/10.3389/fsufs.2026.1883363"
+    },
+    {
+      "label": "ORCID",
+      "url": "https://orcid.org/0009-0005-6789-076X"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "The problem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In applied research, paper tables are often copied by hand from notebooks nobody can run again. When a reviewer asks for a change, redoing the numbers takes weeks and opens the door to errors."
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "heading": "The pipeline",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Each paper lives in its own folder with a `manifest.yaml` (title, target journal, authors and the status of every figure), its data, notebooks, experiments and manuscript. Shared scripts build the PDF, validate DOIs and bibliography, check layout against the journal guide and sync deliverables."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  D[(Peruvian public data)] --> N[Executable notebooks]\n  N --> X[Versioned experiments]\n  X --> O[Outputs: tables and figures]\n  O --> M[Manuscript]\n  MF[manifest.yaml] --> M\n  M --> CI{CI}\n  CI --> V1[Validate DOIs and bibliography]\n  CI --> V2[Check journal layout]\n  CI --> V3[Tests and PDF build]",
+          "caption": "Fig. 1 — From public data to manuscript, with CI on every change."
+        },
+        {
+          "type": "code",
+          "lang": "text",
+          "code": "papers/\n├── c15-2026/   manifest.yaml · data/ · notebooks/ · experiments/ · paper/\n├── c17-2026/   … + DESIGN_DECISIONS.md · reviews/\n├── c20-2026/   … + METHODOLOGY.md · LITERATURE_REVIEW.md · tests/\n└── …\nscripts/\n├── paper_build.py          # construye el PDF del manuscrito\n├── doi_validate.py         # valida cada DOI de la bibliografía\n├── paper_layout_check.py   # revisa la maquetación según la revista\n└── journal_guide.py        # reglas de cada revista destino",
+          "caption": "Monorepo layout: one paper, one self-contained folder.",
+          "source": "https://github.com/lisk0vian/research"
+        }
+      ]
+    },
+    {
+      "id": "publicaciones",
+      "heading": "Publications",
+      "blocks": [
+        {
+          "type": "table",
+          "head": [
+            "Work",
+            "Method",
+            "Venue",
+            "Status"
+          ],
+          "rows": [
+            [
+              "Carrion's disease 2000–2024 (43,000+ records)",
+              "FAMD + K-Means",
+              "Frontiers in AI · Q1",
+              "Published"
+            ],
+            [
+              "Canchán potato wholesale price (MIDAGRI 2020–2025)",
+              "LSTM-XGBoost vs SARIMAX/RNN",
+              "Frontiers in Sust. Food Syst. · Q1",
+              "Published"
+            ],
+            [
+              "Boosting models in blended education",
+              "Boosting",
+              "LACCEI 2026",
+              "Published"
+            ],
+            [
+              "Subseasonal temperature in the Andes",
+              "GBM · LSTM · TFT",
+              "Eng. Appl. of AI",
+              "In preparation"
+            ],
+            [
+              "Low birth weight, temporal validation (2015–2025)",
+              "Classification",
+              "Discover AI",
+              "In preparation"
+            ]
+          ],
+          "caption": "Manuscripts in preparation live in the same pipeline."
+        }
+      ]
+    },
+    {
+      "id": "decisiones",
+      "heading": "Method decisions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Temporal, not random, validation.** Series are split by time to measure real generalisation, not model memory.",
+            "**Stability over minimum error.** For Canchán potatoes we chose LSTM-XGBoost for robustness, even when another model had a lower point error.",
+            "**Mixed data with FAMD.** For clinical records with numeric and categorical variables, FAMD before K-Means gave the best clustering quality."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Results",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "2",
+              "label": "Q1 papers published in 2026"
+            },
+            {
+              "value": "6",
+              "label": "manuscripts in the pipeline"
+            },
+            {
+              "value": "43.000+",
+              "label": "clinical records analysed"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "quote": "Every number in a paper comes from a versioned pipeline; if it does not reproduce, it does not go in.",
+  "nextCaseSlug": "chatcrm"
+}

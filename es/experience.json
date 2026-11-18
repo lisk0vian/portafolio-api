@@ -1,0 +1,44 @@
+[
+  {
+    "company": "J&P Periféricos SAC",
+    "role": "Programador full stack · Líder de equipo",
+    "location": "Lima, Perú · Híbrido",
+    "startDate": "2025-03",
+    "endDate": "2026-09",
+    "current": false,
+    "description": "Entré como practicante y pasé a liderar formalmente un equipo de 4 personas con proyectos en paralelo: un ERP para abogados, un sistema de tickets para inventario y apoyo de diseño de sistemas a otros grupos.",
+    "wins": [
+      "Listado de facturas de 4–5 minutos a menos de 30 segundos reescribiendo consultas y activando caché.",
+      "Kanban de gestión con tablas de auditoría dentro del ERP, hoy usado por 2 empresas cliente además de J&P.",
+      "Entornos de desarrollo y despliegue en Docker; CRM propio en producción como software interno."
+    ],
+    "stack": [
+      "TypeScript",
+      "PHP",
+      "Laravel",
+      "MySQL",
+      "Docker"
+    ]
+  },
+  {
+    "company": "Codecta Perú",
+    "role": "Programador full stack",
+    "location": "Remoto · equipo en Chile",
+    "startDate": "2024-06",
+    "endDate": "2025-11",
+    "current": false,
+    "description": "Backend Ruby + jQuery en un equipo distribuido, sobre un sistema usado por una empresa de contaduría de 100 a 200 personas. Código y pull requests en inglés.",
+    "wins": [
+      "Reportes con exportación a Excel y recetas de pagos para importaciones y órdenes de compra.",
+      "Sincronización de datos para autocompletado y nuevas relaciones de facturas en la UI.",
+      "Deploys en Docker por cada feature y configuración del entorno del equipo."
+    ],
+    "stack": [
+      "Ruby",
+      "jQuery",
+      "JavaScript",
+      "AJAX",
+      "Docker"
+    ]
+  }
+]

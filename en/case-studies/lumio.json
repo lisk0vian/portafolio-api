@@ -1,0 +1,126 @@
+{
+  "slug": "lumio",
+  "projectSlug": "lumio",
+  "year": 2026,
+  "title": "Lumio",
+  "deck": "A transparent electricity-bill calculator: turns kWh into soles and soles into kWh, itemises every charge and runs entirely in the browser.",
+  "stack": [
+    "Astro",
+    "React",
+    "TypeScript",
+    "Tailwind",
+    "Zustand",
+    "Vitest"
+  ],
+  "meta": [
+    {
+      "label": "Role",
+      "value": "Author"
+    },
+    {
+      "label": "Backend",
+      "value": "None"
+    },
+    {
+      "label": "Deploy",
+      "value": "CI → GitHub Pages"
+    },
+    {
+      "label": "Status",
+      "value": "Live"
+    }
+  ],
+  "links": [
+    {
+      "label": "Demo",
+      "url": "https://lisk0vian.github.io/lumio/"
+    },
+    {
+      "label": "Code",
+      "url": "https://github.com/lisk0vian/lumio"
+    },
+    {
+      "label": "How the math works",
+      "url": "https://lisk0vian.github.io/lumio/en/calculation"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "The problem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Peru's electricity bill folds usage, a fixed charge, public lighting and 18% IGV into a single number. Everyday questions —“if I use 120 kWh, how much will I pay?” or “I have S/ 100, how many kWh is that?”— have no quick answer."
+        }
+      ]
+    },
+    {
+      "id": "calculo",
+      "heading": "The math",
+      "blocks": [
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  K[kWh] --> E[Energy = kWh × price]\n  E --> S[Subtotal = energy + fixed + lighting]\n  S --> I[IGV = subtotal × 18%]\n  I --> T[Total S/]\n  T -. exact inverse .-> K",
+          "caption": "Fig. 1 — There and back with the same formula."
+        },
+        {
+          "type": "paragraph",
+          "text": "The reverse conversion is the *exact* inverse of the forward one, so converting back and forth always returns the original value. Getting there required fixing a subtle bug: IGV applies to the whole subtotal, so it must be undone *before* subtracting the charges."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "const monthlyTotal = safeTotal / multiplier\nconst monthlyCharges = fixed + lighting\n\n// Exact inverse of calculateKwhToMoney, which applies the IGV to the whole\n// subtotal (energy + charges). So the IGV has to be undone *before* the\n// charges are subtracted. Subtracting first [...] inflated every conversion\n// by charges * rate / (price * (1 + rate)): with the base tariff that is\n// +0.815 kWh, added again on every unit switch.\n//\n// The guard is the smallest bill this tariff can produce (charges + IGV).\nif (monthlyTotal < monthlyCharges * (1 + rate)) return { kwh: 0 }\n\nreturn { kwh: (monthlyTotal / (1 + rate) - monthlyCharges) / price }",
+          "caption": "Order of operations matters: the bug added +0.815 kWh on every unit switch.",
+          "source": "https://github.com/lisk0vian/lumio/blob/main/src/utils/calculation.utils.ts"
+        }
+      ]
+    },
+    {
+      "id": "producto",
+      "heading": "Product",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Live breakdown of every sol as you type, with a usage scale that uses text as well as colour.",
+            "History stored on the device; no accounts, no tracking.",
+            "Receipt exportable as PNG (rendered from the DOM), to share or send over WhatsApp.",
+            "Editable tariffs by regulator and billing period."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Results",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "0",
+              "label": "servers"
+            },
+            {
+              "value": "2",
+              "label": "conversion directions"
+            },
+            {
+              "value": "ES · EN",
+              "label": "languages"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Lumio deploys through CI to GitHub Pages on every change, with unit tests on the math guarding the formula."
+        }
+      ]
+    }
+  ],
+  "quote": "If there and back don't match, users stop trusting both.",
+  "nextCaseSlug": "research-pipeline"
+}

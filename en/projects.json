@@ -1,0 +1,230 @@
+[
+  {
+    "slug": "chatcrm",
+    "case": "chatcrm",
+    "title": "ChatCRM",
+    "year": 2026,
+    "featured": true,
+    "description": "Shared WhatsApp inbox for teams: every conversation is assigned to an agent and becomes a measurable customer.",
+    "stack": [
+      "NestJS",
+      "React",
+      "BullMQ",
+      "Socket.IO",
+      "FastAPI"
+    ],
+    "metric": "1,000+ commits",
+    "role": "Main author of the API and app",
+    "problem": "WhatsApp messages landed on a single phone; nobody knew who answered or how long it took.",
+    "approach": "Signed Cloud API webhooks, BullMQ queues, real time over Socket.IO, credentials encrypted with AES-256-GCM and Zod contracts shared by API and app.",
+    "result": "In production as internal software since 2025, with 130 test suites in the API.",
+    "links": {
+      "repo": "https://github.com/chat-crm-suite/chat-crm-api"
+    }
+  },
+  {
+    "slug": "tribu",
+    "case": "tribu",
+    "title": "Tribu",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "fullstack"
+    ],
+    "description": "TypeScript SDK that issues electronic payment documents to SUNAT in a single call.",
+    "stack": [
+      "TypeScript",
+      "UBL 2.1",
+      "XMLDSig",
+      "SOAP"
+    ],
+    "metric": "published on npm",
+    "role": "Sole author",
+    "problem": "Issuing an invoice means computing IGV, writing UBL XML, signing, zipping, sending it over SOAP and decoding the answer.",
+    "approach": "A one-call API that checks SUNAT's rules before sending and returns a plain JSON Record.",
+    "result": "SUNAT's beta environment accepts every document type it issues.",
+    "links": {
+      "repo": "https://github.com/tribu-pe/tribu",
+      "demo": "https://www.npmjs.com/package/tribu"
+    }
+  },
+  {
+    "slug": "assess",
+    "case": "assess",
+    "title": "assess (ax)",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "fullstack"
+    ],
+    "description": "Classroom exams from one laptop: the teacher supervises in the terminal and students answer from any browser on the LAN.",
+    "stack": [
+      "Go",
+      "React",
+      "SQLite",
+      "TUI"
+    ],
+    "metric": "zero installs",
+    "role": "Author",
+    "problem": "Exam platforms require internet, accounts and installing software on every classroom machine.",
+    "approach": "A single Go binary that embeds the React app, stores everything in SQLite and applies fair anti-cheat based only on what the browser can see.",
+    "result": "Runs on Windows, Linux and macOS, even from a USB stick, with no internet.",
+    "links": {
+      "repo": "https://github.com/lisk0vian/assess"
+    }
+  },
+  {
+    "slug": "lumio",
+    "case": "lumio",
+    "title": "Lumio",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "fullstack"
+    ],
+    "description": "Transparent electricity-bill calculator for Peru: kWh to soles and back.",
+    "stack": [
+      "Astro",
+      "React",
+      "TypeScript",
+      "Vitest"
+    ],
+    "metric": "100% in-browser",
+    "role": "Author",
+    "problem": "The bill folds energy, fixed charge, public lighting and IGV into one hard-to-predict number.",
+    "approach": "Exact, invertible formula, live breakdown and CI to GitHub Pages, with no backend or accounts.",
+    "result": "Converting back and forth always returns the original value.",
+    "links": {
+      "repo": "https://github.com/lisk0vian/lumio",
+      "demo": "https://lisk0vian.github.io/lumio/"
+    }
+  },
+  {
+    "slug": "erp-facturacion",
+    "title": "Invoicing ERP",
+    "year": 2025,
+    "featured": false,
+    "editions": [
+      "fullstack"
+    ],
+    "description": "Management Kanban with audit tables inside an invoicing ERP used by 3 companies.",
+    "stack": [
+      "PHP",
+      "Laravel",
+      "MySQL",
+      "Docker"
+    ],
+    "metric": "4–5 min → <30 s",
+    "role": "Team lead (4 people)",
+    "problem": "The invoice list took 4 to 5 minutes to load.",
+    "approach": "Rewritten queries and caching; development and deployment environments in Docker.",
+    "result": "Load time dropped below 30 seconds.",
+    "results": [
+      {
+        "label": "Invoice list load",
+        "before": "4–5 min",
+        "after": "< 30 s"
+      },
+      {
+        "label": "Client companies",
+        "before": "1",
+        "after": "3"
+      }
+    ],
+    "resultsCaption": "measured in production, J&P Periféricos SAC.",
+    "links": {}
+  },
+  {
+    "slug": "research-pipeline",
+    "case": "research-pipeline",
+    "title": "Reproducible research pipeline",
+    "year": 2026,
+    "featured": true,
+    "editions": [
+      "data"
+    ],
+    "description": "Paper monorepo where every figure comes from a versioned pipeline, with CI validating DOIs, layout and builds.",
+    "stack": [
+      "Python",
+      "pandas",
+      "LightGBM",
+      "Quarto",
+      "GitHub Actions"
+    ],
+    "metric": "6 manuscripts",
+    "role": "Co-author and pipeline engineer",
+    "problem": "Paper results were copied by hand from notebooks and nobody could get them again.",
+    "approach": "A manifest per paper, executable notebooks, validation scripts and CI on every change.",
+    "result": "2 papers published in Q1 Frontiers journals in 2026.",
+    "links": {
+      "repo": "https://github.com/lisk0vian/research"
+    }
+  },
+  {
+    "slug": "papa-canchan",
+    "title": "Canchán potato price forecasting",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "data"
+    ],
+    "description": "Comparison of SARIMAX, RNN, LSTM and hybrids on MIDAGRI 2020–2025 data.",
+    "stack": [
+      "Python",
+      "XGBoost",
+      "LSTM",
+      "SARIMAX"
+    ],
+    "metric": "Q1 · Frontiers",
+    "problem": "Forecasting monthly crop prices from short, noisy series.",
+    "approach": "Prioritising stability and real generalisation over minimum error.",
+    "result": "LSTM-XGBoost was the most robust model.",
+    "links": {
+      "demo": "https://doi.org/10.3389/fsufs.2026.1883363"
+    }
+  },
+  {
+    "slug": "carrion-clustering",
+    "title": "Carrion's disease profiles",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "data"
+    ],
+    "description": "Unsupervised clustering of 43,000+ records (2000–2024) for public-health surveillance.",
+    "stack": [
+      "Python",
+      "FAMD",
+      "K-Means",
+      "scikit-learn"
+    ],
+    "metric": "Q1 · Frontiers",
+    "problem": "Understanding an endemic disease from mixed (numeric and categorical) data.",
+    "approach": "FAMD dimensionality reduction + K-Means, compared with other combinations.",
+    "result": "Two distinct, stable epidemiological profiles.",
+    "links": {
+      "demo": "https://doi.org/10.3389/frai.2026.1883357"
+    }
+  },
+  {
+    "slug": "chatcrm-ia",
+    "title": "ChatCRM AI: Spanish sentiment",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "data"
+    ],
+    "description": "FastAPI service that scores the sentiment of every customer message with a Spanish-trained transformer.",
+    "stack": [
+      "Python",
+      "FastAPI",
+      "pysentimiento",
+      "Docker"
+    ],
+    "metric": "POS · NEU · NEG",
+    "result": "Feeds the conversation view and the metrics dashboard.",
+    "links": {
+      "repo": "https://github.com/chat-crm-suite/chat-crm-ia"
+    }
+  }
+]

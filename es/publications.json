@@ -1,0 +1,79 @@
+[
+  {
+    "slug": "papa-canchan-forecasting",
+    "featured": true,
+    "type": "journal",
+    "year": 2026,
+    "publishedAt": "2026-08",
+    "title": "Forecasting wholesale prices of Canchán potatoes using artificial intelligence models with data from the Ministry of Agrarian Development and Irrigation of Peru (2020–2025)",
+    "authors": [
+      "M. Evangelista Gamarra",
+      "J. A. Chancan Labajos",
+      "P. E. Figueroa Rosas",
+      "R. E. Alvarez Manrique"
+    ],
+    "venue": "Frontiers in Sustainable Food Systems",
+    "pages": "Vol. 10 · 1883363",
+    "doi": "https://doi.org/10.3389/fsufs.2026.1883363",
+    "pdfUrl": "",
+    "url": "https://doi.org/10.3389/fsufs.2026.1883363",
+    "abstract": "Comparamos SARIMAX, RNN, LSTM y modelos híbridos para predecir el precio mensual de la papa Canchán con datos del MIDAGRI. Priorizando la estabilidad y la generalización real sobre el error mínimo, LSTM-XGBoost fue el más robusto; el resultado es un marco reproducible para otros cultivos.",
+    "keywords": [
+      "forecasting",
+      "lstm",
+      "xgboost",
+      "agriculture"
+    ],
+    "language": "Inglés"
+  },
+  {
+    "slug": "carrion-clustering",
+    "featured": true,
+    "type": "journal",
+    "year": 2026,
+    "publishedAt": "2026-08",
+    "title": "Application of dimensionality reduction and clustering techniques for the analysis of Carrion's disease cases in the period 2000–2024",
+    "authors": [
+      "M. Evangelista Gamarra",
+      "J. A. Chancan Labajos",
+      "P. E. Figueroa Rosas",
+      "R. E. Alvarez Manrique"
+    ],
+    "venue": "Frontiers in Artificial Intelligence",
+    "pages": "Vol. 9 · 1883357",
+    "doi": "https://doi.org/10.3389/frai.2026.1883357",
+    "pdfUrl": "",
+    "url": "https://doi.org/10.3389/frai.2026.1883357",
+    "abstract": "Marco de epidemiología exploratoria sobre más de 43.000 registros de la enfermedad de Carrión (2000–2024). La combinación FAMD + K-Means dio la mejor calidad de clustering e identificó dos perfiles epidemiológicos distintos y estables para apoyar la vigilancia en salud pública.",
+    "keywords": [
+      "clustering",
+      "famd",
+      "k-means",
+      "public health"
+    ],
+    "language": "Inglés"
+  },
+  {
+    "slug": "boosting-blended-education",
+    "featured": false,
+    "type": "conference",
+    "year": 2026,
+    "publishedAt": "2026-07",
+    "title": "Comparación de modelos Boosting en educación blended",
+    "authors": [
+      "M. Evangelista Gamarra",
+      "J. A. Chancan Labajos",
+      "P. E. Figueroa Rosas",
+      "R. E. Alvarez Manrique"
+    ],
+    "venue": "LACCEI 2026",
+    "doi": "",
+    "pdfUrl": "",
+    "abstract": "Comparación de modelos de la familia Boosting para predecir el desempeño académico en cursos de modalidad blended.",
+    "keywords": [
+      "boosting",
+      "education"
+    ],
+    "language": "Inglés"
+  }
+]

@@ -1,86 +1,48 @@
-# Portfolio API
+# portafolio-api
 
-Public read-only API for the portfolio. NestJS + Fastify + TypeScript.
+Datos del portafolio de Jerremi Aron Chancan Labajos ([lisk0vian](https://github.com/lisk0vian)): JSON por idioma y PDFs. No hay servidor: el sitio los lee directamente desde `raw.githubusercontent.com`.
 
-## Requirements
-
-- Node 20+ (22 recommended)
-- pnpm 9+
-
-## Local development
-
-```bash
-cp .env.example .env
-pnpm install
-pnpm run start:dev
+```
+https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/{es|en}/{recurso}.json
 ```
 
-- API: `http://localhost:3000/api`
-- Swagger: `http://localhost:3000/docs`
-- Health: `GET /api/health`
+## Estructura
 
-## Language negotiation (headers, stable URLs)
-
-Endpoints never change with the language. Send one of these headers:
-
-```bash
-# Spanish via standard header
-curl -H "Accept-Language: es" http://localhost:3000/api/profile
-
-# Spanish via explicit override (wins over Accept-Language)
-curl -H "x-lang: es" http://localhost:3000/api/profile
-
-# Default (no header) is English
-curl http://localhost:3000/api/profile
+```
+es/ · en/                    mismos archivos en cada idioma
+├── profile.json             perfil, redes, "sobre mí", principios, ediciones (fullstack | data)
+├── projects.json            proyectos; `case` apunta a un caso de estudio
+├── experience.json          experiencia laboral
+├── skills.json              grupos de skills (años, uso diario)
+├── certifications.json      certificaciones; `tags` define los grupos de /certificaciones
+├── publications.json        publicaciones con DOI
+├── education.json           formación
+└── case-studies/
+    ├── index.json           lista de casos (slug, título, resumen)
+    └── <slug>.json          caso completo por bloques
+files/
+├── cv/                      cv-es.pdf · cv-en.pdf
+└── certifications/          PDFs de certificados (<slug>.pdf)
+scripts/validate.mjs         valida JSON, paridad es/en y enlaces entre casos
 ```
 
-Supported values: `en`, `es` (including tags like `es-ES`, `en-US`).
-Unsupported or missing values fall back to `en`.
+## Casos de estudio
 
-## Version negotiation (headers, stable URLs)
+Un caso es una lista de `sections`, cada una con `blocks`:
 
-The version is also sent via header, so URLs never include it:
+| `type` | Campos |
+|---|---|
+| `paragraph` | `text` (admite `**negrita**`, `*cursiva*` y `` `código` ``) |
+| `list` | `items[]` |
+| `code` | `lang`, `code`, `caption`, `source` (URL al archivo original) |
+| `diagram` | `format: "mermaid"`, `source`, `caption` |
+| `table` | `head[]`, `rows[][]`, `caption` |
+| `metrics` | `items[]` con `value` y `label` |
 
-```bash
-# Default version (no header needed)
-curl http://localhost:3000/api/profile
+Los diagramas son texto Mermaid: GitHub los muestra igual que el sitio.
 
-# Explicit version
-curl -H "x-api-version: 1" http://localhost:3000/api/profile
-```
+## Editar
 
-Supported versions: `1`. Missing values fall back to the default.
-
-## Endpoints (read-only)
-
-- `GET /api/profile`
-- `GET /api/projects?featured=true&stack=nest&limit=20`
-- `GET /api/projects/:slug`
-- `GET /api/experience`
-- `GET /api/skills`
-- `GET /api/education`
-- `GET /api/certifications?tag=aws&skill=docker&featured=true&expired=false&fields=slug,title&limit=20`
-- `GET /api/certifications/:slug?fields=slug,title,issuer`
-- `GET /api/case-studies?projectSlug=&tag=&search=&fields=&limit=`
-- `GET /api/case-studies/:slug?fields=slug,title,sections`
-
-Slugs and query params are identical in every language and version;
-only the localized text changes.
-
-Edit the content in `src/data/<resource>/*.ts` (one bilingual file per entry,
-built with the factories in `src/data/_factories/`).
-Each entry is validated by its factory at startup,
-and `locales.parity.spec.ts` ensures both languages expose the same entries.
-
-## Quality gates
-
-```bash
-pnpm run lint
-pnpm run test
-pnpm run test:e2e
-pnpm run build
-```
-
-Includes: Fastify + helmet/compress/cors, global validation,
-header versioning, Pino logs, 60 req/min rate limit, Swagger,
-and CI in `.github/workflows/ci.yml`.
+1. Cambia el JSON en `es/` **y** en `en/`.
+2. `node scripts/validate.mjs` (también corre en CI).
+3. Commit y push: el sitio toma los cambios en la siguiente visita; las páginas de casos nuevos aparecen tras el despliegue diario del sitio.

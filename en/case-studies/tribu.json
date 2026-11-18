@@ -1,0 +1,160 @@
+{
+  "slug": "tribu",
+  "projectSlug": "tribu",
+  "year": 2026,
+  "title": "Tribu",
+  "deck": "Issue electronic payment documents to SUNAT from TypeScript in one call: no XML to write, no IGV to compute, no SUNAT codes to type.",
+  "stack": [
+    "TypeScript",
+    "Node.js 22",
+    "UBL 2.1",
+    "XMLDSig",
+    "SOAP",
+    "Vitest"
+  ],
+  "meta": [
+    {
+      "label": "Role",
+      "value": "Sole author"
+    },
+    {
+      "label": "Distribution",
+      "value": "npm · tribu@experimental"
+    },
+    {
+      "label": "License",
+      "value": "MIT"
+    },
+    {
+      "label": "Status",
+      "value": "Experimental · validated in beta"
+    }
+  ],
+  "links": [
+    {
+      "label": "Code",
+      "url": "https://github.com/tribu-pe/tribu"
+    },
+    {
+      "label": "npm",
+      "url": "https://www.npmjs.com/package/tribu"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "The problem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "In Peru every formal sale must be issued as an electronic document to SUNAT. Without a library that means computing IGV, writing UBL 2.1 XML, signing it with the digital certificate, zipping it, sending it over SOAP and decoding the response receipt (CDR)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Every step has rules SUNAT only reports after sending, with unclear error codes."
+        }
+      ]
+    },
+    {
+      "id": "solucion",
+      "heading": "The solution",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Tribu turns the whole process into one call. It computes the amounts, validates the document against SUNAT's rules *before* sending, builds and signs the XML, sends it and returns one plain JSON `Record` for you to save."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "import tribu, { Status } from 'tribu';\n\nconst sunat = tribu.create({\n  env: 'beta',\n  issuer: { ruc: '20000000001', name: 'EMPRESA DE PRUEBA SAC', ubigeo: '150101' },\n  sol: { user: 'MODDATOS', password: 'MODDATOS' }, // credenciales beta públicas de SUNAT\n  certificate: { pfx: readFileSync('certificate.pfx'), passphrase },\n  nextNumber: (series) => db.nextNumber(series),  // tu base de datos reserva el número\n});\n\nconst { record } = await sunat.invoice({\n  customer: { ruc: '20123456786', name: 'CLIENTE SAC' },\n  items: [{ description: 'Teclado', quantity: 2, price: 118 }],\n});",
+          "caption": "Issuing an invoice: IGV, XML and signing are handled by Tribu.",
+          "source": "https://github.com/tribu-pe/tribu#quick-start"
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  A[sunat.invoice] --> B[Compute amounts and IGV]\n  B --> C{SUNAT rules}\n  C -- error --> X[Error with suggested fix]\n  C -- ok --> D[UBL 2.1 XML]\n  D --> E[XMLDSig signature]\n  E --> F[ZIP + SOAP]\n  F --> G[(SUNAT)]\n  G --> H[CDR]\n  H --> R[JSON Record]",
+          "caption": "Fig. 1 — The issuing pipeline: rules are checked before touching the network."
+        }
+      ]
+    },
+    {
+      "id": "decisiones",
+      "heading": "Technical decisions",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Server only.** Tribu holds the certificate and SOL password, so `tribu.create` refuses to run in a browser.",
+            "**Your database numbers.** `nextNumber` is a callback: sequencing is guaranteed by your transaction, not an in-memory counter.",
+            "**Actionable errors.** Every validation error says which field fails and how to fix it, before wasting a submission.",
+            "**Pluggable transport.** A custom `transport` can target an OSE without changing anything else."
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Area",
+            "Covered in v0.1"
+          ],
+          "rows": [
+            [
+              "Documents",
+              "Invoices, receipts (individually or in a daily summary), credit and debit notes"
+            ],
+            [
+              "Reporting",
+              "Daily summary, voided documents, `waitFor`, `retry`"
+            ],
+            [
+              "IGV",
+              "General and the reduced rate for restaurants and hotels"
+            ],
+            [
+              "Currency",
+              "PEN, USD"
+            ],
+            [
+              "Payment",
+              "Cash or credit with installments"
+            ],
+            [
+              "Detracciones",
+              "On invoices in soles"
+            ]
+          ],
+          "caption": "Current scope; what is not covered is documented in the README."
+        }
+      ]
+    },
+    {
+      "id": "resultados",
+      "heading": "Results",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "100%",
+              "label": "document types accepted by SUNAT beta"
+            },
+            {
+              "value": "67",
+              "label": "test files"
+            },
+            {
+              "value": "1",
+              "label": "call to issue"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "SUNAT's beta environment accepts every document type Tribu issues. It ships as experimental until verified in production, and the README explains how to report that experience without exposing credentials."
+        }
+      ]
+    }
+  ],
+  "quote": "You never write XML, never compute IGV and never type a SUNAT code by hand.",
+  "nextCaseSlug": "assess"
+}
