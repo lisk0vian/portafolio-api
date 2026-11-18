@@ -155,6 +155,11 @@
               "Downloads when a diagram nears the screen"
             ],
             [
+              "CLS 0.70 on certifications",
+              "The page arrived empty and filled on the client; then the font swap moved everything",
+              "HTML built with the same renderer as the client + fallback font with Sora's metrics"
+            ],
+            [
               "Sections painted on load",
               "Skills and publications rendered on the client at once",
               "Painted 800 px before you reach them"
@@ -401,6 +406,34 @@
           "code": "{\n  \"ci\": {\n    \"collect\": { \"numberOfRuns\": 3 },\n    \"assert\": {\n      \"assertions\": {\n        \"categories:performance\": [\"error\", { \"minScore\": 0.9, \"aggregationMethod\": \"median-run\" }],\n        \"categories:accessibility\": [\"error\", { \"minScore\": 0.95 }],\n        \"largest-contentful-paint\": [\"error\", { \"maxNumericValue\": 2500, \"aggregationMethod\": \"median-run\" }],\n        \"cumulative-layout-shift\": [\"error\", { \"maxNumericValue\": 0.1, \"aggregationMethod\": \"median-run\" }],\n        \"total-blocking-time\": [\"warn\", { \"maxNumericValue\": 200, \"aggregationMethod\": \"median-run\" }]\n      }\n    }\n  }\n}",
           "caption": "lighthouserc.json: the thresholds that guard performance.",
           "source": "https://github.com/lisk0vian/portafolio-web/blob/main/lighthouserc.json"
+        },
+        {
+          "type": "paragraph",
+          "text": "**The CI has already earned its place.** It failed on its first run: the certifications page, which I had not measured, scored 75 for performance with a CLS of 0.70. It arrived empty and filled on the client, and the font swap then shifted the whole list. I built it at build time with the same renderer the client uses and added a fallback font with Sora's metrics (`size-adjust`, `ascent-override`, computed with fontTools)."
+        },
+        {
+          "type": "bars",
+          "legend": {
+            "before": "Before",
+            "after": "After"
+          },
+          "rows": [
+            {
+              "label": "CLS",
+              "unit": "",
+              "before": 0.704,
+              "after": 0.03,
+              "better": "lower"
+            },
+            {
+              "label": "Performance",
+              "unit": "pts",
+              "before": 75,
+              "after": 99,
+              "better": "higher"
+            }
+          ],
+          "caption": "Fig. 5 — /certificaciones before (Lighthouse CI in production) and after (local Lighthouse)."
         },
         {
           "type": "paragraph",
