@@ -43,9 +43,15 @@
     "Since June 2024 I have shipped product across several teams at once. At J&P Periféricos I joined as an intern and now lead a team of 4; before that, at Codecta, I worked with a distributed team based in Chile, with code and pull requests in English."
   ],
   "notes": [
-    "1,000+ commits on ChatCRM, in production as internal software since 2025.",
-    "My own SDK published on npm: Tribu, SUNAT e-invoicing.",
-    "Co-author of 2 Q1 Frontiers papers (2026), on real Peruvian data."
+    {
+      "text": "1,000+ commits on ChatCRM, in production as internal software since 2025."
+    },
+    {
+      "text": "My own SDK published on npm: Tribu, SUNAT e-invoicing."
+    },
+    {
+      "text": "Co-author of 2 Q1 Frontiers papers (2026), on real Peruvian data."
+    }
   ],
   "letter": "If you are looking for someone who designs the system and takes it to production —with research as backing, not decoration— write to me.",
   "quote": "Every number in a paper comes from a versioned pipeline; if it does not reproduce, it does not go in.",
