@@ -74,5 +74,22 @@
       "Quarto",
       "GitHub Actions"
     ]
+  },
+  {
+    "slug": "portafolio",
+    "projectSlug": "portafolio",
+    "title": "Este portafolio",
+    "deck": "De una API NestJS con datos de plantilla a un sitio estático alimentado por GitHub: rendimiento móvil de 71 a 98 en Lighthouse, 86 % menos peso y verificación automática en cada despliegue.",
+    "year": 2026,
+    "stack": [
+      "Astro 7",
+      "TypeScript",
+      "Tailwind 4",
+      "GitHub Pages",
+      "GitHub Actions",
+      "Lighthouse CI",
+      "Shiki",
+      "Mermaid"
+    ]
   }
 ]

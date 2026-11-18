@@ -100,6 +100,50 @@
     }
   },
   {
+    "slug": "portafolio",
+    "case": "portafolio",
+    "title": "Este portafolio",
+    "year": 2026,
+    "featured": false,
+    "editions": [
+      "fullstack"
+    ],
+    "description": "Sitio estático alimentado por JSON en GitHub, con Lighthouse CI en cada despliegue.",
+    "stack": [
+      "Astro",
+      "TypeScript",
+      "GitHub Actions",
+      "Lighthouse CI"
+    ],
+    "metric": "Lighthouse 71 → 98",
+    "role": "Diseño, desarrollo y medición",
+    "problem": "Una API NestJS servía datos de plantilla y el sitio pesaba 1,3 MB en móvil.",
+    "approach": "Datos como JSON en GitHub, render en build, JS no crítico en tiempo ocioso y fachada para la mascota.",
+    "result": "Rendimiento móvil de 71 a 98 y 86 % menos peso.",
+    "results": [
+      {
+        "label": "LCP",
+        "before": "5,6 s",
+        "after": "2,0 s"
+      },
+      {
+        "label": "Peso",
+        "before": "1.341 KB",
+        "after": "185 KB"
+      },
+      {
+        "label": "TBT",
+        "before": "363 ms",
+        "after": "20 ms"
+      }
+    ],
+    "resultsCaption": "Lighthouse móvil, mediana de 3 corridas.",
+    "links": {
+      "repo": "https://github.com/lisk0vian/portafolio-web",
+      "demo": "https://lisk0vian.github.io/portafolio-web/"
+    }
+  },
+  {
     "slug": "erp-facturacion",
     "title": "ERP de facturación",
     "year": 2025,

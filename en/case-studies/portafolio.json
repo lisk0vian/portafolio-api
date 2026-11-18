@@ -1,0 +1,429 @@
+{
+  "slug": "portafolio",
+  "projectSlug": "portafolio",
+  "year": 2026,
+  "title": "This portfolio",
+  "deck": "From a NestJS API with template data to a static site fed by GitHub: mobile Lighthouse performance from 71 to 98, 86% less weight and automatic checks on every deploy.",
+  "stack": [
+    "Astro 7",
+    "TypeScript",
+    "Tailwind 4",
+    "GitHub Pages",
+    "GitHub Actions",
+    "Lighthouse CI",
+    "Shiki",
+    "Mermaid"
+  ],
+  "meta": [
+    {
+      "label": "Role",
+      "value": "Design, build and measurement"
+    },
+    {
+      "label": "Lighthouse",
+      "value": "71 → 98 (mobile)"
+    },
+    {
+      "label": "Home weight",
+      "value": "1.341 KB → 185 KB"
+    },
+    {
+      "label": "Servers",
+      "value": "0"
+    }
+  ],
+  "links": [
+    {
+      "label": "Live site",
+      "url": "https://lisk0vian.github.io/portafolio-web/"
+    },
+    {
+      "label": "Site source code (Astro)",
+      "url": "https://github.com/lisk0vian/portafolio-web"
+    },
+    {
+      "label": "Data repository (JSON and PDF)",
+      "url": "https://github.com/lisk0vian/portafolio-api"
+    },
+    {
+      "label": "Personal brand (logo, photo, icons)",
+      "url": "https://github.com/lisk0vian/me"
+    }
+  ],
+  "sections": [
+    {
+      "id": "problema",
+      "heading": "The problem",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The portfolio started as a template: an Astro site querying a NestJS API whose data was hand-written in TypeScript. Running a server just to serve static content added nothing, and every text change required a backend deploy."
+        },
+        {
+          "type": "paragraph",
+          "text": "It was also slow on mobile: the original photo weighed 1.1 MB, a fake 0–100% counter covered the hero, and an animated mascot kept the main thread busy from the first frame. Lighthouse scored it 71 for performance."
+        }
+      ]
+    },
+    {
+      "id": "arquitectura",
+      "heading": "Architecture",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Three repositories, one responsibility each. Content lives as per-language JSON in `portafolio-api`; the brand in `me`; the site in `portafolio-web`. The root repo ties them together as git submodules."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "flowchart LR\n  subgraph data[portafolio-api]\n    J[es/ · en/ JSON] --- F[files/ CV and certificates]\n    V[validate.mjs in CI]\n  end\n  subgraph brand[me]\n    B[photo · logo · icons]\n  end\n  subgraph web[portafolio-web · Astro]\n    S[GithubPortfolioSource]\n  end\n  J -- raw.githubusercontent --> S\n  B -- photo optimised at build --> web\n  web -- GitHub Actions --> GH[GitHub Pages]\n  GH --> LH[Lighthouse CI]\n  GH --> U((Visitor))\n  U -. revalidates JSON when idle .-> J",
+          "caption": "Fig. 1 — Content, brand and site kept apart; no server of my own."
+        },
+        {
+          "type": "diagram",
+          "format": "mermaid",
+          "source": "sequenceDiagram\n  participant N as Browser\n  participant P as GitHub Pages\n  participant R as raw.githubusercontent\n  N->>P: GET / (HTML already holds real data)\n  P-->>N: HTML + CSS (complete hero)\n  Note over N: first paint: the hero is readable\n  N->>N: idle time: terminal, static mascot\n  N->>R: GET en/*.json (revalidate)\n  R-->>N: JSON\n  N->>N: anything changed? only then repaint\n  N->>N: first interaction: animated mascot",
+          "caption": "Fig. 2 — Load order: what is visible first, the rest when the browser is free."
+        }
+      ]
+    },
+    {
+      "id": "decisiones",
+      "heading": "Technical decisions",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**1. Reuse the existing port instead of rewriting.** The site already depended on a `PortfolioSource` interface with a mock implementation that filtered in memory. The GitHub source reuses those same filters: only where the data comes from changes."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "export class GithubPortfolioSource implements PortfolioSource {\n  readonly kind = 'live' as const;\n  // Una descarga por archivo y por instancia: el home pide certificaciones dos veces.\n  private cache = new Map<string, Promise<unknown>>();\n\n  private get<T>(lang: Lang, path: string): Promise<T> {\n    const url = `${this.baseUrl}/${lang}/${path}.json`;\n    let hit = this.cache.get(url);\n    if (!hit) {\n      hit = fetch(url, { signal: AbortSignal.timeout(DATA_TIMEOUT_MS) }).then(async (res) => {\n        if (!res.ok) throw new ApiError(path, `${res.status} ${res.statusText} — ${url}`, res.status);\n        return res.json();\n      });\n      hit.catch(() => this.cache.delete(url)); // un fallo no queda cacheado\n      this.cache.set(url, hit);\n    }\n    return hit as Promise<T>;\n  }\n\n  async fetchCertifications(lang: Lang, query: CertificationsQuery = {}) {\n    return filterCertifications(await this.get<CertificationDto[]>(lang, 'certifications'), query);\n  }\n}",
+          "caption": "The NestJS API was replaced by ~90 lines that read JSON from GitHub.",
+          "source": "https://github.com/lisk0vian/portafolio-web/blob/main/src/lib/live-source.ts"
+        },
+        {
+          "type": "paragraph",
+          "text": "**2. Render at build, revalidate on the client.** The HTML is generated with the real data (search engines and readers without JavaScript see everything). In the browser the home fetches the JSON again when idle and repaints only if something changed since the deploy."
+        },
+        {
+          "type": "paragraph",
+          "text": "**3. A facade for the mascot.** Its 3D animation cost 3.2 s of CPU during load. Now a static frame is drawn with the same library and the real animation starts on the first interaction: it looks identical and the load stays free."
+        },
+        {
+          "type": "code",
+          "lang": "ts",
+          "code": "// Fachada: primero un fotograma estático; la mascota animada arranca con la primera interacción.\nlet real: MascotController | null = null;\nconst still = () => {\n  const { pose } = sampleAnimation(want.def, want.anim, 0);\n  art.innerHTML = renderSceneToSvgString(buildScene(want.def, pose));\n};\nstill();\nconst WAKE = [\"pointermove\", \"pointerdown\", \"keydown\", \"scroll\", \"touchstart\"] as const;\nconst animate = () => {\n  WAKE.forEach((ev) => removeEventListener(ev, animate));\n  if (real) return;\n  art.innerHTML = \"\";\n  real = createMascot(art, { definition: want.def, animation: want.anim });\n};\nWAKE.forEach((ev) => addEventListener(ev, animate, { passive: true }));",
+          "caption": "Facade pattern: same look, zero animation until someone interacts.",
+          "source": "https://github.com/lisk0vian/portafolio-web/blob/main/src/scripts/mascot.ts"
+        },
+        {
+          "type": "paragraph",
+          "text": "**4. No layout reads on every scroll.** The scrollspy and reveal animations read `getBoundingClientRect` on every event (667 ms of CPU during load). They now use `IntersectionObserver`; the scrollspy watches a 1 px band under the header."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Finding",
+            "Cause",
+            "Change"
+          ],
+          "rows": [
+            [
+              "1,166 KB photo",
+              "Original 2232 px JPG from the brand repo",
+              "4:5 WebP built with srcset: 8–28 KB"
+            ],
+            [
+              "Hero covered ~1.6 s",
+              "Fake 0–100% counter",
+              "Removed: the headline entrance does that job"
+            ],
+            [
+              "3.2 s of CPU",
+              "Mascot animating from the first frame",
+              "Static facade + animation after first interaction"
+            ],
+            [
+              "667 ms in `onScroll`",
+              "Forced layout on every event",
+              "IntersectionObserver"
+            ],
+            [
+              "~700 KB on every case",
+              "Mermaid loaded on page open",
+              "Downloads when a diagram nears the screen"
+            ],
+            [
+              "Sections painted on load",
+              "Skills and publications rendered on the client at once",
+              "Painted 800 px before you reach them"
+            ]
+          ],
+          "caption": "Every change came from a CPU profile or an audit, not from guesses."
+        },
+        {
+          "type": "paragraph",
+          "text": "**5. What I measured and dropped.** Preloading the headline font looked like an obvious win. An A/B test (5 runs per variant) showed the opposite: on a slow network it competed with the CSS and pushed the case LCP from 988 ms to 2,424 ms. It was removed."
+        }
+      ]
+    },
+    {
+      "id": "rendimiento",
+      "heading": "Performance: before and after",
+      "blocks": [
+        {
+          "type": "metrics",
+          "items": [
+            {
+              "value": "71 → 98",
+              "label": "Lighthouse performance (home)"
+            },
+            {
+              "value": "69 → 99",
+              "label": "Lighthouse performance (case)"
+            },
+            {
+              "value": "91 → 100",
+              "label": "Accessibility"
+            },
+            {
+              "value": "−86 %",
+              "label": "home weight"
+            }
+          ]
+        },
+        {
+          "type": "bars",
+          "legend": {
+            "before": "Before",
+            "after": "After"
+          },
+          "rows": [
+            {
+              "label": "LCP",
+              "unit": "ms",
+              "before": 5573,
+              "after": 1967,
+              "better": "lower"
+            },
+            {
+              "label": "TBT",
+              "unit": "ms",
+              "before": 363,
+              "after": 20,
+              "better": "lower"
+            },
+            {
+              "label": "Speed Index",
+              "unit": "ms",
+              "before": 2015,
+              "after": 1742,
+              "better": "lower"
+            },
+            {
+              "label": "Transfer size",
+              "unit": "KB",
+              "before": 1341,
+              "after": 185,
+              "better": "lower"
+            },
+            {
+              "label": "JS execution",
+              "unit": "ms",
+              "before": 1515,
+              "after": 265,
+              "better": "lower"
+            }
+          ],
+          "caption": "Fig. 3 — Home on mobile. Lower is better for every metric."
+        },
+        {
+          "type": "bars",
+          "legend": {
+            "before": "Before",
+            "after": "After"
+          },
+          "rows": [
+            {
+              "label": "LCP",
+              "unit": "ms",
+              "before": 2212,
+              "after": 1664,
+              "better": "lower"
+            },
+            {
+              "label": "TBT",
+              "unit": "ms",
+              "before": 1881,
+              "after": 0,
+              "better": "lower"
+            },
+            {
+              "label": "Transfer size",
+              "unit": "KB",
+              "before": 788,
+              "after": 104,
+              "better": "lower"
+            },
+            {
+              "label": "JS execution",
+              "unit": "ms",
+              "before": 2583,
+              "after": 82,
+              "better": "lower"
+            }
+          ],
+          "caption": "Fig. 4 — ChatCRM case study on mobile (with Mermaid diagrams)."
+        },
+        {
+          "type": "table",
+          "head": [
+            "Page",
+            "Version",
+            "Perf.",
+            "A11y",
+            "FCP",
+            "LCP",
+            "TBT",
+            "CLS",
+            "KB"
+          ],
+          "rows": [
+            [
+              "Home",
+              "Before",
+              "71",
+              "91",
+              "1.361 ms",
+              "5.573 ms",
+              "363 ms",
+              "0,013",
+              "1.341"
+            ],
+            [
+              "Home",
+              "After",
+              "98",
+              "100",
+              "1.742 ms",
+              "1.967 ms",
+              "20 ms",
+              "0",
+              "185"
+            ],
+            [
+              "ChatCRM case",
+              "Before",
+              "69",
+              "94",
+              "1.931 ms",
+              "2.212 ms",
+              "1.881 ms",
+              "0,001",
+              "788"
+            ],
+            [
+              "ChatCRM case",
+              "After",
+              "99",
+              "100",
+              "1.664 ms",
+              "1.664 ms",
+              "0 ms",
+              "0,001",
+              "104"
+            ],
+            [
+              "Home EN",
+              "Before",
+              "91",
+              "91",
+              "1.661 ms",
+              "1.975 ms",
+              "339 ms",
+              "0",
+              "1.340"
+            ],
+            [
+              "Home EN",
+              "After",
+              "98",
+              "100",
+              "1.741 ms",
+              "1.958 ms",
+              "0 ms",
+              "0,019",
+              "184"
+            ]
+          ],
+          "caption": "Data behind the figures. Best practices and SEO: 100 in both versions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Home FCP rises from 1.36 s to 1.74 s, and it is fair to say why: before, the first thing painted was the fake counter, not content. Today the first paint is already the full hero, and LCP —when the main content is visible— drops from 5.6 s to 2.0 s."
+        }
+      ]
+    },
+    {
+      "id": "movil",
+      "heading": "The mobile hero",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "On mobile the hero fills exactly one screen. Content sits at the top and the leftover space holds the mascot stage, which adapts to the available height through a *container query*; on short phones it hides and the mascot appears in the corner after the hero, without covering the buttons."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/portafolio/hero-movil.webp",
+          "alt": "Portfolio hero on a 412 by 915 pixel phone",
+          "caption": "Hero at 412 × 915: content on top, the mascot uses the space that used to be empty."
+        },
+        {
+          "type": "image",
+          "src": "https://raw.githubusercontent.com/lisk0vian/portafolio-api/main/files/cases/portafolio/retrato-lupa.webp",
+          "alt": "Duotone portrait with a circular lens revealing the colour photo",
+          "caption": "Portrait: brand duotone in CSS and a colour lens under the pointer (tap on touch)."
+        }
+      ]
+    },
+    {
+      "id": "ci",
+      "heading": "Checks on every deploy",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Every push to `main` builds the site, publishes it to GitHub Pages and then runs **Lighthouse CI** against the deployed pages (3 runs per page). The workflow fails if performance drops below 90, if accessibility, best practices or SEO drop below 95, or if LCP exceeds 2.5 s."
+        },
+        {
+          "type": "code",
+          "lang": "json",
+          "code": "{\n  \"ci\": {\n    \"collect\": { \"numberOfRuns\": 3 },\n    \"assert\": {\n      \"assertions\": {\n        \"categories:performance\": [\"error\", { \"minScore\": 0.9, \"aggregationMethod\": \"median-run\" }],\n        \"categories:accessibility\": [\"error\", { \"minScore\": 0.95 }],\n        \"largest-contentful-paint\": [\"error\", { \"maxNumericValue\": 2500, \"aggregationMethod\": \"median-run\" }],\n        \"cumulative-layout-shift\": [\"error\", { \"maxNumericValue\": 0.1, \"aggregationMethod\": \"median-run\" }],\n        \"total-blocking-time\": [\"warn\", { \"maxNumericValue\": 200, \"aggregationMethod\": \"median-run\" }]\n      }\n    }\n  }\n}",
+          "caption": "lighthouserc.json: the thresholds that guard performance.",
+          "source": "https://github.com/lisk0vian/portafolio-web/blob/main/lighthouserc.json"
+        },
+        {
+          "type": "paragraph",
+          "text": "The data repo has its own CI: a dependency-free script checks that every JSON parses, that Spanish and English have the same files and that links between cases exist."
+        }
+      ]
+    },
+    {
+      "id": "metodo",
+      "heading": "How I measured",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "**Tool:** Lighthouse 12.8.2 (CLI), default mobile profile: Moto G Power, simulated Slow 4G and 4× slower CPU.",
+            "**Fair comparison:** the previous version (commit `f15df52`) and the current one were built with the same data and served by the same gzip server, like GitHub Pages.",
+            "**Median of 3 runs** per page and version; the font test used 5 runs per variant.",
+            "**Diagnosis:** CPU profiles via the DevTools protocol on an unminified build to locate every costly function."
+          ]
+        }
+      ]
+    }
+  ],
+  "quote": "Measure first, then change; and whatever doesn't move the number gets removed.",
+  "nextCaseSlug": "chatcrm"
+}
